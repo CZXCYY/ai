@@ -846,7 +846,7 @@ function render() {
         </div>
       </div>
       
-      <button class="start-btn" onclick="startTest()">开始测试</button>
+      <button class="start-btn" id="btnStart">开始测试</button>
       <p class="note">⏱️ 约3分钟 · 发现你的AI时代基因</p>
       
       ${history.length > 0 ? `
@@ -1378,6 +1378,9 @@ function declinePrivacy() {
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+  // 绑定开始测试按钮
+  const btnStart = document.getElementById('btnStart');
+  if (btnStart) btnStart.addEventListener('click', startTest);
   if (loadState()) {
     // 恢复状态
   }
