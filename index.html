@@ -1410,6 +1410,10 @@ function showToast(msg) {
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+  // 如果隐私已同意，隐藏弹窗
+  if (getPrivacy()) {
+    document.getElementById('privacyModal').classList.add('hidden');
+  }
   if (loadState()) {
     // 恢复状态
   }
