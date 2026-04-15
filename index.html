@@ -89,14 +89,18 @@
     .option.selected .opt-label { background: rgba(99,102,241,0.2); color: #818cf8; }
     .opt-text { font-size: 14px; line-height: 1.5; flex: 1; }
     
-    /* 排序题 */
+    /* 排序题 - 移动端适配 */
     .sort-items { display: flex; flex-direction: column; gap: 8px; }
-    .sort-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; cursor: grab; transition: all 0.2s; user-select: none; }
-    .sort-item:active { cursor: grabbing; }
+    .sort-item { display: flex; align-items: center; gap: 10px; padding: 14px 12px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.2s; user-select: none; }
+    .sort-item:active { background: rgba(99,102,241,0.08); }
     .sort-item.dragging { opacity: 0.5; border-color: #6366f1; }
-    .sort-item.drag-over { border-color: #a78bfa; background: rgba(139,92,246,0.08); }
-    .sort-num { width: 26px; height: 26px; background: rgba(99,102,241,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #818cf8; flex-shrink: 0; }
-    .sort-text { font-size: 14px; flex: 1; }
+    .sort-item.drag-over { border-color: #a78bfa; background: rgba(139,92,246,0.12); }
+    .sort-num { width: 28px; height: 28px; background: rgba(99,102,241,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #818cf8; flex-shrink: 0; }
+    .sort-text { font-size: 14px; flex: 1; line-height: 1.4; }
+    .sort-btns { display: flex; flex-direction: column; gap: 4px; }
+    .sort-btn { width: 24px; height: 24px; background: rgba(99,102,241,0.15); border: none; border-radius: 6px; color: #818cf8; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .sort-btn:hover { background: rgba(99,102,241,0.3); }
+    .sort-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .sort-hint { font-size: 12px; color: #64748b; margin-top: 12px; }
     .sort-confirm-btn { display: block; width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, #6366f1, #7c3aed); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; }
     
@@ -559,18 +563,22 @@
             </div>
           </div>`;
       } else if (q.qType === 'sort') {
-        // 排序题：userOrder为null表示未作答，有值表示已作答
+        // 排序题：用户通过上下按钮调整顺序
         const order = answered !== undefined ? answered : [0,1,2,3];
         bodyHtml = `
           <div class="sort-items" id="sortList">
             ${order.map((itemIdx, position) => `
-              <div class="sort-item" draggable="true" data-idx="${position}" data-item="${itemIdx}">
+              <div class="sort-item" data-pos="${position}">
                 <div class="sort-num">${position + 1}</div>
                 <div class="sort-text">${q.items[itemIdx]}</div>
+                <div class="sort-btns">
+                  <button class="sort-btn" onclick="moveSortItem(${position}, -1)" ${position === 0 ? 'disabled' : ''}>↑</button>
+                  <button class="sort-btn" onclick="moveSortItem(${position}, 1)" ${position === order.length - 1 ? 'disabled' : ''}>↓</button>
+                </div>
               </div>
             `).join('')}
           </div>
-          <div class="sort-hint">📌 拖动调整顺序，完成后点击"确认"按钮</div>
+          <div class="sort-hint">📌 点击↑↓调整顺序，最重要的排第1位</div>
           <button class="sort-confirm-btn" onclick="confirmSort()">确认排序 →</button>`;
       }
       
@@ -609,71 +617,48 @@
         </div>`;
       
       if (isSortQ) {
-        setTimeout(bindSortEvents, 100);
+        // 排序题不需要额外的bindSortEvents，已经用onclick处理
       }
     }
     
-    function bindSortEvents() {
-      const list = document.getElementById('sortList');
-      if (!list) return;
-      const items = list.querySelectorAll('.sort-item');
-      let draggedItem = null;
+    function moveSortItem(pos, direction) {
+      const q = state.questions[state.current];
+      const order = state.answers[q.realId] !== undefined ? [...state.answers[q.realId]] : [0,1,2,3];
+      const newPos = pos + direction;
+      if (newPos < 0 || newPos >= order.length) return;
       
-      items.forEach(item => {
-        item.addEventListener('dragstart', e => {
-          draggedItem = item;
-          item.classList.add('dragging');
-          e.dataTransfer.effectAllowed = 'move';
-        });
-        
-        item.addEventListener('dragend', () => {
-          item.classList.remove('dragging');
-          document.querySelectorAll('.sort-item').forEach(el => el.classList.remove('drag-over'));
-        });
-        
-        item.addEventListener('dragover', e => {
-          e.preventDefault();
-          if (item !== draggedItem) item.classList.add('drag-over');
-        });
-        
-        item.addEventListener('dragleave', () => {
-          item.classList.remove('drag-over');
-        });
-        
-        item.addEventListener('drop', e => {
-          e.preventDefault();
-          item.classList.remove('drag-over');
-          if (item !== draggedItem) {
-            const allItems = [...list.querySelectorAll('.sort-item')];
-            const draggedIdx = allItems.indexOf(draggedItem);
-            const targetIdx = allItems.indexOf(item);
-            
-            if (draggedIdx < targetIdx) item.after(draggedItem);
-            else item.before(draggedItem);
-            
-            // 更新序号显示
-            [...list.querySelectorAll('.sort-item')].forEach((el, idx) => {
-              el.querySelector('.sort-num').textContent = idx + 1;
-            });
-          }
-        });
-      });
+      // 交换位置
+      [order[pos], order[newPos]] = [order[newPos], order[pos]];
+      state.answers[q.realId] = order;
+      saveState();
+      
+      // 重新渲染排序列表
+      const list = document.getElementById('sortList');
+      if (list) {
+        list.innerHTML = order.map((itemIdx, position) => `
+          <div class="sort-item" data-pos="${position}">
+            <div class="sort-num">${position + 1}</div>
+            <div class="sort-text">${q.items[itemIdx]}</div>
+            <div class="sort-btns">
+              <button class="sort-btn" onclick="moveSortItem(${position}, -1)" ${position === 0 ? 'disabled' : ''}>↑</button>
+              <button class="sort-btn" onclick="moveSortItem(${position}, 1)" ${position === order.length - 1 ? 'disabled' : ''}>↓</button>
+            </div>
+          </div>
+        `).join('');
+      }
     }
     
     function confirmSort() {
       const q = state.questions[state.current];
-      const list = document.getElementById('sortList');
-      const order = [...list.querySelectorAll('.sort-item')].map(el => parseInt(el.dataset.item));
+      const order = state.answers[q.realId];
+      if (!order) return;
       
-      state.answers[q.realId] = order;
-      saveState();
       showToast('已保存');
       
       setTimeout(() => {
         if (state.current < state.questions.length - 1) {
           nextQ();
         } else {
-          // 在最后一题时，render会显示"查看结果"按钮
           render();
         }
       }, 500);
@@ -692,12 +677,10 @@
         event.currentTarget.classList.add('selected');
       }
       
-      // 非排序题：自动跳转
       setTimeout(() => {
         if (state.current < state.questions.length - 1) {
           nextQ();
         } else {
-          // 最后一道题刷新显示"查看结果"
           render();
         }
       }, 300);
