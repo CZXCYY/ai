@@ -195,7 +195,26 @@
 <body>
   <div class="bg-gradient"></div>
   <div class="container" id="app"></div>
-
+  <div id="privacyModal">
+    <div class="modal-box">
+      <h2>🔒 隐私协议</h2>
+      <div class="modal-content">
+        <h3>数据收集</h3>
+        <p>本测试仅收集你主动提交的回答数据，用于生成测试结果。</p>
+        <p>数据存储在你的本地设备中，不会自动上传至任何服务器。</p>
+        <h3>历史记录</h3>
+        <p>你的测试记录保存在浏览器本地存储中，可随时手动删除。</p>
+        <h3>分享内容</h3>
+        <p>生成的分享图片仅包含测试结果，不包含任何个人信息。</p>
+        <h3>第三方服务</h3>
+        <p>如使用付费解锁功能，支付由第三方支付平台处理，我们不会存储你的支付信息。</p>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="declinePrivacy()">暂不开始</button>
+        <button class="btn-accept" onclick="acceptPrivacy()">我已知晓</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 // ============ 题库 ============
@@ -846,7 +865,7 @@ function render() {
         </div>
       </div>
       
-      <button class="start-btn" id="btnStart">开始测试</button>
+      <button class="start-btn" onclick="startTest()">开始测试</button>
       <p class="note">⏱️ 约3分钟 · 发现你的AI时代基因</p>
       
       ${history.length > 0 ? `
@@ -1350,7 +1369,10 @@ function verifyCode() {
 
 // ============ 启动 ============
 function startTest() {
-  // 隐私已同意，直接开始
+  if (!getPrivacy()) {
+    document.getElementById('privacyModal').classList.remove('hidden');
+    return;
+  }
   
   state = {
     view: 'question',
@@ -1376,17 +1398,6 @@ function declinePrivacy() {
   document.getElementById('privacyModal').classList.add('hidden');
 }
 
-// 初始化
-document.addEventListener('DOMContentLoaded', () => {
-  if (loadState()) {
-    // 恢复状态
-  }
-  render();
-  // render() 执行后才绑定按钮事件
-  const btnStart = document.getElementById('btnStart');
-  if (btnStart) btnStart.addEventListener('click', startTest);
-});
-
 function showToast(msg) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
@@ -1397,6 +1408,13 @@ function showToast(msg) {
   setTimeout(() => el.remove(), 2000);
 }
 
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+  if (loadState()) {
+    // 恢复状态
+  }
+  render();
+});
 </script>
 </body>
 </html>
