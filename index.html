@@ -489,9 +489,17 @@ const types = {
     advantage:['思维全面，看问题不偏激','能适应各种环境和角色','擅长整合不同资源解决问题'],
     suggest:['找到自己的核心竞争力，深挖下去','你是万金油，但也要有一个"绝活"','让AI补足你的短板，放大你的长板']
   },
-  '潜力股型': { icon:'💎', en:'Rising Star', desc:'你还没完全发挥出自己的潜力。你的直觉和感受力比大多数人都敏锐，只是还在找到正确的方式。', super:'直觉敏锐 × 成长型',
+  '潜力股型': { icon:'💎', en:'Rising Star', desc:'你还没完全发挥出自己的潜力。你的直觉和感受力比大多数人都敏锐，只是还在探索适合自己的方式。', super:'直觉敏锐 × 成长型',
     advantage:['感知力强，能捕捉到细微的变化','思维没有被定式所束缚','学习能力强，成长速度快'],
     suggest:['建立自己的思维框架和方法论','多接触新事物，让潜能找到出口','让AI帮你把模糊的直觉变成清晰的行动']
+  },
+  '执行者型': { icon:'⚡', en:'Action Master', desc:'你是那种"想到就干"的人。别人还在犹豫，你已经开始了。执行力是你最大的武器。', super:'行动力 × 执行力',
+    advantage:['想到就干，不拖延','面对困难不退缩，敢于尝试','擅长把想法变成现实'],
+    suggest:['想清楚再行动，成功率会更高','学会借力AI，让执行效率翻倍','不要只顾低头干活，偶尔抬头看路']
+  },
+  '协调者型': { icon:'👥', en:'Coordinator', desc:'你是那种"整合资源、推动协作"的人。别人各自为战，你能让团队产生1+1>2的效果。', super:'资源整合 × 团队协作',
+    advantage:['擅长发现每个人的长处','能协调不同立场，达成共识','会借力AI提升团队整体效率'],
+    suggest:['学会在协作中保持自己的判断','用AI处理重复性工作，专注协调价值','不要过度协调，学会适时退出']
   }
 };
 
@@ -673,23 +681,53 @@ function calculateResult() {
     }
   }
   
-  // 确定主类型
+  // 确定主类型（8种）
   const maxDim = pcts.indexOf(Math.max(...pcts));
   const minDim = pcts.indexOf(Math.min(...pcts));
+  const maxPct = Math.max(...pcts);
+  const minPct = Math.min(...pcts);
+  const diff = maxPct - minPct;
   
   let typeKey;
   if (pcts.every(p => p >= 82)) {
     typeKey = '全栈型';
   } else if (pcts.every(p => p < 72)) {
-    typeKey = '璞玉型';
+    typeKey = '潜力股型';
+  } else if (diff < 8) {
+    // 差距小但非全低/全高 → 根据维度组合判断
+    const sum03 = pcts[0] + pcts[3]; // 逻辑+创意
+    const sum12 = pcts[1] + pcts[2]; // 表达+AI
+    if (sum03 > sum12 + 6) {
+      typeKey = '执行者型';
+    } else if (sum12 > sum03 + 6) {
+      typeKey = '协调者型';
+    } else {
+      // 四个都差不多，按最高维度
+      const typeMap = { 0:'思想家型', 1:'表达者型', 2:'AI指挥官型', 3:'创意家型' };
+      typeKey = typeMap[maxDim];
+    }
   } else {
-    const typeMap = {
-      0: '思想家型',
-      1: '表达者型',
-      2: '协作大师型',
-      3: '创意家型'
-    };
-    typeKey = typeMap[maxDim];
+    // 有明显主导维度
+    const typeMap = { 0:'思想家型', 1:'表达者型', 2:'AI指挥官型', 3:'创意家型' };
+    // 检查是否有组合倾向
+    if (diff >= 8 && diff < 15) {
+      // 有一定差距但不够大，考虑组合
+      const otherHigh = pcts.filter((p, i) => i !== maxDim).sort((a, b) => b - a)[0];
+      if (maxPct - otherHigh < 10) {
+        // 第二名很接近，考虑组合型
+        if ((maxDim === 0 || maxDim === 3) && otherHigh === (maxDim === 0 ? 3 : 0)) {
+          typeKey = '执行者型';
+        } else if ((maxDim === 1 || maxDim === 2) && otherHigh === (maxDim === 1 ? 2 : 1)) {
+          typeKey = '协调者型';
+        } else {
+          typeKey = typeMap[maxDim];
+        }
+      } else {
+        typeKey = typeMap[maxDim];
+      }
+    } else {
+      typeKey = typeMap[maxDim];
+    }
   }
   
   const total = Math.round(80 + pcts.reduce((a, b) => a + b, 0) / 400 * 12);
