@@ -210,8 +210,8 @@
         <p>如使用付费解锁功能，支付由第三方支付平台处理，我们不会存储你的支付信息。</p>
       </div>
       <div class="modal-btns">
-        <button type="button" class="btn-cancel" onclick="declinePrivacy()">暂不开始</button>
-        <button type="button" class="btn-accept" onclick="acceptPrivacy()">我已知晓</button>
+        <button type="button" class="btn-cancel" id="btnDecline">暂不开始</button>
+        <button type="button" class="btn-accept" id="btnAccept">我已知晓</button>
       </div>
     </div>
   </div>
@@ -1398,6 +1398,23 @@ function declinePrivacy() {
   document.getElementById('privacyModal').classList.add('hidden');
 }
 
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+  // 如果隐私已同意，隐藏弹窗
+  if (getPrivacy()) {
+    document.getElementById('privacyModal').classList.add('hidden');
+  }
+  // 绑定隐私弹窗按钮事件
+  const btnAccept = document.getElementById('btnAccept');
+  const btnDecline = document.getElementById('btnDecline');
+  if (btnAccept) btnAccept.addEventListener('click', acceptPrivacy);
+  if (btnDecline) btnDecline.addEventListener('click', declinePrivacy);
+  if (loadState()) {
+    // 恢复状态
+  }
+  render();
+});
+
 function showToast(msg) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
@@ -1408,17 +1425,6 @@ function showToast(msg) {
   setTimeout(() => el.remove(), 2000);
 }
 
-// 初始化
-document.addEventListener('DOMContentLoaded', () => {
-  // 如果隐私已同意，隐藏弹窗
-  if (getPrivacy()) {
-    document.getElementById('privacyModal').classList.add('hidden');
-  }
-  if (loadState()) {
-    // 恢复状态
-  }
-  render();
-});
 </script>
 </body>
 </html>
