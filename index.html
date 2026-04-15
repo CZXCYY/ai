@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧠 AI时代思维测试 - 发现你在AI时代的独特优势</title>
+  <title>🧠 AI思维测试 · 灵魂画像</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #080810; color: #f1f5f9; min-height: 100vh; overflow-x: hidden; }
@@ -143,18 +143,9 @@
     .super-label { font-size: 11px; color: #818cf8; margin-bottom: 6px; font-weight: 600; }
     .super-text { font-size: 13px; color: #a5b4fc; line-height: 1.6; }
     
-    .feature-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .feature-tag { background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(167,139,250,0.2)); border: 1px solid rgba(99,102,241,0.3); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: #a5b4fc; }
-    
-    .person-model { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(251,191,36,0.05)); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 16px; font-size: 14px; color: #fcd34d; line-height: 1.7; text-align: center; margin-top: 8px; }
-    
-    .desc-text { font-size: 13px; color: #94a3b8; line-height: 1.8; }
-    
-    .career-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .career-tag { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.15); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #6ee7b7; }
-    
     .result-section { margin-top: 20px; }
-    .result-section h3 { font-size: 13px; color: #94a3b8; margin-bottom: 12px; font-weight: 500; }
+    .result-section h3 { font-size: 12px; color: #64748b; margin-bottom: 12px; }
+    .result-section h3::before { content: '// '; }
     
     .advantage-item { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.1); border-radius: 12px; padding: 14px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: #6ee7b7; }
     .suggest-item { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.1); border-radius: 12px; padding: 14px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: #fcd34d; }
@@ -229,14 +220,14 @@ const questionBank = {
     // --- 逻辑推理 (dim:0) ---
     {
       id:'c1', dim:0,
-      text:'周一早上，你需要向团队同步一个重要决策，你会？',
+      text:'你负责策划公司年会，面对众口难调，你会？',
       options:[
-        '先整理好数据、结论、建议，发邮件正文',
-        '拉个会，边讲边讨论',
-        '先和几个关键人物私聊统一意见',
-        '直接定，通知大家执行就好'
+        '先发问卷收集需求，用数据决策',
+        '直接定下方案，有问题再调整',
+        '找几个核心同事头脑风暴',
+        '让各部门自己报方案，统一筛选'
       ],
-      tags:['数据驱动','会议型','预热型','权威型']
+      tags:['数据驱动','果断决策','群体智慧','授权型']
     },
     {
       id:'c2', dim:0,
@@ -274,25 +265,25 @@ const questionBank = {
     // --- 语言表达 (dim:1) ---
     {
       id:'c5', dim:1,
-      text:'在工作群里，你通常属于哪种类型的消息发送者？',
+      text:'你发朋友圈的动力来源是？',
       options:[
-        '重要事项才发，字少事大',
-        '有感而发，偶尔水群',
-        '转发有价值的行业资讯',
-        '基本只看不说，潜水围观'
+        '记录生活，以后翻看',
+        '希望获得认可和点赞',
+        '分享有价值的内容帮到别人',
+        '纯粹是手滑点了发送'
       ],
-      tags:['精准型','活跃型','价值型','沉默型']
+      tags:['记录型','互动型','价值型','即兴型']
     },
     {
       id:'c6', dim:1,
-      text:'朋友向你倾诉烦恼，你更常见的反应是？',
+      text:'同事向你吐槽工作烦恼，你通常怎么回应？',
       options:[
-        '帮他分析问题，给出解决方案',
-        '陪他一起吐槽，释放情绪',
-        '说点别的，转移注意力',
-        '安静听着，让他自己说够'
+        '先听他说完，再分析问题给建议',
+        '跟着一起吐槽，表达共鸣',
+        '岔开话题，聊点轻松的',
+        '默默听着，偶尔回应一下'
       ],
-      tags:['顾问型','陪伴型','分散型','倾听型']
+      tags:['分析建议','情感共鸣','转移话题','沉默陪伴']
     },
     {
       id:'c7', dim:1,
@@ -319,47 +310,47 @@ const questionBank = {
     // --- AI协作 (dim:2) ---
     {
       id:'c9', dim:2,
-      text:'用AI写工作文案时，你通常会？',
+      text:'用AI工具时，你最容易在哪一步卡住？',
       options:[
-        '先自己列提纲，再让AI扩写',
-        '直接丢给AI，让它先写一版',
-        '和AI反复修改，一点点调整',
-        '主要用AI检查语法和错别字'
+        '不知道该怎么提问',
+        'AI回答的不符合预期',
+        '看不懂AI的回答',
+        '我基本不用AI工具'
       ],
-      tags:['主导型','借力型','迭代型','辅助型']
+      tags:['需求描述','调试能力','理解能力','使用习惯']
     },
     {
       id:'c10', dim:2,
-      text:'当你发现AI完全理解错了你的意思，你会？',
+      text:'你向AI提问时，更习惯怎么问？',
       options:[
-        '重新组织语言，更具体地描述',
-        '换个角度问，试试不同的问法',
-        '算了，AI不行，还是自己写吧',
-        '追问AI：你刚才理解的是什么？'
+        '给足背景信息，问得具体',
+        '直接问结果，不解释原因',
+        '先问一个小问题，逐步深入',
+        '把我的观点说出来，让AI评判'
       ],
-      tags:['优化型','试探型','放弃型','纠正型']
+      tags:['充分背景','直奔主题','循序渐进','讨论式']
     },
     {
       id:'c11', dim:2,
-      text:'AI时代，你最担心什么？',
+      text:'AI的回答让你觉得"有用"是因为？',
       options:[
-        '自己会被AI取代',
-        '同事用AI卷过我',
-        '不知道该怎么学AI',
-        'AI给出的答案不靠谱，不敢用'
+        '直接给出了可操作的步骤',
+        '让我换一个角度思考问题',
+        '帮我验证了我的想法是对的',
+        '告诉了我不知道的新知识'
       ],
-      tags:['危机型','竞争型','学习型','谨慎型']
+      tags:['执行型','启发型','确认型','学习型']
     },
     {
       id:'c12', dim:2,
-      text:'如果一个AI能完美帮你完成工作，你会？',
+      text:'你更愿意用AI做什么？',
       options:[
-        '把省下的时间用来做更有创造力的事情',
-        '偷偷用，然后惊艳所有人',
-        '担心自己会变懒，能力退化',
-        '想弄清楚AI是怎么做到的'
+        '翻译、写稿、润色文字',
+        '写代码、调试bug',
+        '搜索信息、整理资料',
+        '聊天陪伴，打发时间'
       ],
-      tags:['进取型','效率型','忧虑型','好奇型']
+      tags:['文字型','代码型','信息型','闲聊型']
     },
     // --- 创意想象 (dim:3) ---
     {
@@ -411,15 +402,15 @@ const questionBank = {
   // ========== 判断题库（10道） ==========
   // 每道题立场鲜明，无模糊地带
   tf: [
-    { id:'t1', dim:2, text:'未来最稀缺的不是会回答的人，而是会提问的人', tags:['提问型'] },
+    { id:'t1', dim:2, text:'和AI对话时，一次说清楚比慢慢追问效率更高', tags:['高效型'] },
     { id:'t2', dim:0, text:'做决定时，直觉有时候比分析更靠谱', tags:['直觉型'] },
-    { id:'t3', dim:1, text:'同样的道理，用故事讲比用数据讲更让人信服', tags:['故事型'] },
+    { id:'t3', dim:1, text:'同样的内容，视频比图文更容易让人记住', tags:['视觉型'] },
     { id:'t4', dim:3, text:'失败是成功的一部分，值得花时间试错', tags:['冒险型'] },
-    { id:'t5', dim:2, text:'好的prompt比答案本身更有价值', tags:['高效型'] },
-    { id:'t6', dim:0, text:'大多数问题，想清楚了就等于解决了一半', tags:['思考型'] },
-    { id:'t7', dim:1, text:'职场中，会说话的人往往比会做事的人走得更远', tags:['表达型'] },
+    { id:'t5', dim:2, text:'AI时代，提问能力比回答能力更重要', tags:['提问型'] },
+    { id:'t6', dim:0, text:'复杂问题一定有简单解法，只是还没找到', tags:['简约型'] },
+    { id:'t7', dim:1, text:'说话简洁的人，通常效率更高', tags:['效率型'] },
     { id:'t8', dim:3, text:'学点完全用不上的东西，也很有价值', tags:['无用型'] },
-    { id:'t9', dim:2, text:'会用AI的人，一定会取代不会用AI的人', tags:['觉醒型'] },
+    { id:'t9', dim:2, text:'AI说的也可以当权威依据', tags:['信任型'] },
     { id:'t10', dim:3, text:'规则是用来打破的，墨守成规难有创新', tags:['变革型'] }
   ],
 
@@ -428,14 +419,14 @@ const questionBank = {
   sort: [
     {
       id:'s1', dim:2,
-      text:'你用AI帮写一份项目方案，标准的流程是？',
+      text:'你用AI完成一份方案报告，标准的流程是？',
       items:[
-        '先自己想清楚核心目标和关键点',
-        '把背景、要求、格式一股脑告诉AI',
-        '让AI先出一版，然后我修改',
-        '和AI来回讨论，逐步完善'
+        '自己先想好核心框架',
+        '把要求完整的告诉AI',
+        '让AI先出一个初稿',
+        '自己修改完善定稿'
       ],
-      tags:['独立思考','需求明确','AI初稿','迭代优化']
+      tags:['先想框架','需求清晰','AI起草','人工润色']
     },
     {
       id:'s2', dim:0,
@@ -461,14 +452,14 @@ const questionBank = {
     },
     {
       id:'s4', dim:1,
-      text:'你要给领导发一条重要的工作汇报，你会？',
+      text:'你要向领导汇报一个复杂项目的进展，你会？',
       items:[
-        '结论+结论+结论，重要的事说三遍',
-        '按模块清晰列出，一目了然',
-        '先问清楚领导最想了解什么',
-        '写完自己先检查一遍，避免低级错误'
+        '先说结论，再说原因',
+        '按时间线从头讲清楚',
+        '先了解领导最关心什么',
+        '做个PPT，一目了然'
       ],
-      tags:['简洁型','条理型','共情型','严谨型']
+      tags:['结论先行','流程型','体谅型','可视化']
     }
   ]
 };
@@ -478,109 +469,29 @@ const dimNames = ['逻辑推理', '语言表达', 'AI协作', '创意想象'];
 const dimColors = ['#6366f1', '#a78bfa', '#10b981', '#f59e0b'];
 
 const types = {
-  '思想家型': { 
-    icon:'🧠', en:'Logic Maestro', 
-    desc:'你是那种"想清楚再干"的人。别人觉得你想太多，但你知道：想清楚本身就是一种竞争力。', 
-    super:'理性深度 × 系统思考',
-    features:['刨根问底','注重证据','逻辑严密','善于分析'],
-    personality:'冷静理性，喜欢深度思考，对模糊零容忍，追求问题的本质解。',
-    strengths:['能一眼看穿问题的本质','决策质量高，很少犯低级错误','和AI对话时总能找到关键追问','擅长把复杂问题拆解成简单步骤'],
-    suggestions:['别等想完美了才开始，让AI帮你试错','适当接受"足够好"而非"完美"','你的逻辑是优势，别让它成为行动的阻碍','学会在不确定中做决策'],
-    workstyle:'习惯深度调研后行动，喜欢画脑图理清思路，对拍脑袋的决定有本能排斥。',
-    aitype:'把AI当作思维伙伴，用精确的prompt引导AI验证自己的假设。',
-    personModel:'🧠 戴眼镜的小狐狸，手里总是拿着放大镜，表情专注认真，穿着学院风的毛背心。',
-    career:'分析师、策略师、咨询顾问、研究员、架构师'
+  '思想家型': { icon:'🧠', en:'Logic Maestro', desc:'你是一个天生的"逻辑探索者"。面对问题时，你习惯抽丝剥茧、追根究底，找到事物背后的因果链条。', super:'理性分析 + 系统思考',
+    advantage:['思维如精密仪器，误差极小','擅长把模糊问题拆解成清晰步骤','与AI对话时能提出精准的追问'],
+    suggest:['偶尔接受"不完美但有趣"的答案','用AI激发创意而不仅是验证逻辑','给直觉留一点空间']
   },
-  '表达者型': { 
-    icon:'💬', en:'Expression Master', 
-    desc:'你能把枯燥的事情讲得引人入胜，把复杂的问题说得通俗易懂。这是职场被低估的能力。', 
-    super:'精准表达 × 情感共鸣',
-    features:['善于沟通','共情力强','表达生动','故事思维'],
-    personality:'天生话痨，喜欢和人交流，能快速和人打成一片，说话永远比做事更吸引人。',
-    strengths:['说话有人愿意听，做汇报一把好手','擅长用故事包装观点，让人信服','能精准描述需求，让AI理解你的意图','能快速建立信任关系'],
-    suggestions:['学会用数据支撑你的故事','了解AI的表达逻辑，协作更高效','让你的影响力从个人变成团队','培养书面表达的严谨性'],
-    workstyle:'喜欢开会讨论，用对话推动工作，擅长一对多沟通，讨厌枯燥的文档。',
-    aitype:'让AI帮你润色和扩展思路，但最终表达一定是你自己。',
-    personModel:'💬 圆润可爱的小兔子，总是笑眯眯的，手里拿着话筒，穿着休闲西装，像个小型主持人。',
-    career:'销售、运营、内容创作者、培训师、公关、品牌营销'
+  '表达者型': { icon:'💬', en:'Expression Master', desc:'你拥有独特的语言天赋——能把复杂的事情说简单，把平淡的话说动人。你是天生的"故事讲述者"。', super:'精准表达 + 情感共鸣',
+    advantage:['文字有画面感，让人沉浸','擅长讲故事、做比喻','能清晰描述需求让AI理解你的意图'],
+    suggest:['学习AI的语言规则让协作更高效','用逻辑框架组织你的丰富表达','让AI帮你扩展思路']
   },
-  'AI指挥官型': { 
-    icon:'🤖', en:'AI Commander', 
-    desc:'你是那种"让AI干活"的人。别人还在纠结AI能不能用，你已经在用AI拿到结果了。', 
-    super:'精准指挥 × 高效协作',
-    features:['目标导向','善于提问','结果驱动','持续迭代'],
-    personality:'务实主义者，只看结果不问过程，把AI当作最强工具，用完就走。',
-    strengths:['知道怎么给AI下指令','不会被AI带偏，有自己的判断','擅长整合AI能力放大个人产出','效率是你们的代名词'],
-    suggestions:['多了解AI的能力边界，拓展应用场景','用AI探索更多可能性，别局限在舒适区','保持人类独有的判断力和价值观','学会复盘AI产出，持续优化指令'],
-    workstyle:'结果导向，喜欢用AI做重复性工作，专注做只有人能做的事。',
-    aitype:'把AI当作最强员工，懂得下指令、要结果、改要求。',
-    personModel:'🤖 酷酷的小机器人，穿着程序员T恤，眼睛发光，手里拿着遥控器，表情自信满满。',
-    career:'产品经理、项目经理、创业者、独立开发者、自媒体人'
+  '协作大师型': { icon:'🤝', en:'AI Synergist', desc:'你是"人机协作"的天才。你不需要最聪明，但你是最会"用"AI的人——知道AI能做什么，更知道它不能做什么。', super:'精准提问 + 结果优化',
+    advantage:['能精准描述需求给AI','','擅长根据AI反馈迭代优化','不会被AI带偏，有自己的判断'],
+    suggest:['多了解AI的能力边界','用AI探索更多可能性','保持独立思考，不完全依赖AI']
   },
-  '创意家型': { 
-    icon:'🎨', en:'Creative Spark', 
-    desc:'你的脑子里装满了"如果这样会怎样"。别人觉得你想太多，但你知道，创新就来自于敢想。', 
-    super:'跨界联想 × 突破边界',
-    features:['好奇心强','思维发散','敢想敢做','讨厌重复'],
-    personality:'脑洞清奇，总是想到别人想不到的点子，对无聊的日常工作有本能抗拒。',
-    strengths:['点子多，能想到别人想不到的角度','敢于打破常规，不被规则束缚','和AI结合能产生惊人的创意组合','擅长从不同领域获取灵感'],
-    suggestions:['学会用逻辑框架让创意落地','清晰表达是你的短板，补足它','让AI帮你验证和执行创意','找到能让你发挥创意的环境'],
-    workstyle:'喜欢自由的工作方式，讨厌条条框框，需要空间和时间让灵感自然发生。',
-    aitype:'和AI一起头脑风暴，让AI帮你把疯狂的点子变成可行的方案。',
-    personModel:'🎨 炸毛的小艺术家，头发像彩虹一样多彩，手里拿着画笔，眼神充满想象力的火花。',
-    career:'设计师、策划、编剧、创意总监、产品创新、创业者'
+  '创意家型': { icon:'🎨', en:'Creative Spark', desc:'你的大脑永不满足于"正确答案"。你总在想："还有没有别的可能？"你是那个打破常规、带来惊喜的人。', super:'跨界联想 + 突破边界',
+    advantage:['想法天马行空，点子多','擅长发现事物间的新联系','不怕失败，愿意尝试'],
+    suggest:['用逻辑框架让创意落地','学会清晰表达你的想法','让AI帮你验证和优化创意']
   },
-  '全栈型': { 
-    icon:'🧩', en:'Full Stack Thinker', 
-    desc:'你没有明显的短板，各项能力均衡发展。你是那种什么情况都能应对的"职场瑞士军刀"。', 
-    super:'均衡发展 × 适应力强',
-    features:['全面均衡','适应力强','善于学习','综合能力强'],
-    personality:'没有明显短板也没有绝对长板，但关键时刻总能站出来解决问题。',
-    strengths:['思维全面，看问题不偏激','能适应各种环境和角色','擅长整合不同资源解决问题','是最好的团队粘合剂'],
-    suggestions:['找到自己的核心竞争力，深挖下去','你是万金油，但也要有一个"绝活"','让AI补足你的短板，放大你的长板','学会在团队中找到自己的独特定位'],
-    workstyle:'哪缺人去哪，能快速补位，喜欢做有挑战性的综合事务。',
-    aitype:'把AI当作全能助手，让AI处理你不擅长的部分。',
-    personModel:'🧩 圆圆的多功能小工具人，可以变换不同造型，戴着万能眼镜，性格温和但可靠。',
-    career:'管理者、创业者、顾问、项目负责人、跨领域专家'
+  '全栈型': { icon:'🧩', en:'Full Stack Thinker', desc:'你没有明显的短板，各项能力均衡发展。你像一把"瑞士军刀"——什么场景都能应对，是真正的多面手。', super:'均衡发展 + 适应力强',
+    advantage:['思维全面，不偏科','能适应各种挑战','擅长整合不同资源'],
+    suggest:['找到自己的核心优势','在某一领域深挖','让AI补足你的短板']
   },
-  '潜力股型': { 
-    icon:'💎', en:'Rising Star', 
-    desc:'你还没完全发挥出自己的潜力。你的直觉和感受力比大多数人都敏锐，只是还在探索适合自己的方式。', 
-    super:'直觉敏锐 × 成长型',
-    features:['直觉敏锐','学习力强','潜力无限','善于感知'],
-    personality:'还在寻找自己的方向，直觉很准，感知力强，成长速度会越来越快。',
-    strengths:['感知力强，能捕捉到细微的变化','思维没有被定式所束缚','学习能力强，成长速度快','对新鲜事物有强烈好奇心'],
-    suggestions:['建立自己的思维框架和方法论','多接触新事物，让潜能找到出口','让AI帮你把模糊的直觉变成清晰的行动','不要急于给自己贴标签，你还在成长中'],
-    workstyle:'需要探索和试错，不喜欢被固定在某个岗位，需要自由成长的空间。',
-    aitype:'让AI当你的学习伙伴和教练，加速你的成长。',
-    personModel:'💎 闪闪发光的小水晶，透明纯净，里面藏着无限可能，性格害羞但眼神明亮。',
-    career:'需要持续学习的岗位、探索性工作、管理培训生'
-  },
-  '执行者型': { 
-    icon:'⚡', en:'Action Master', 
-    desc:'你是那种"想到就干"的人。别人还在犹豫，你已经开始了。执行力是你最大的武器。', 
-    super:'行动力 × 执行力',
-    features:['执行力强','行动迅速','抗压耐操','善于落地'],
-    personality:'不喜欢想太多，干了再说。遇到问题解决问题，不喜欢绕弯子。',
-    strengths:['想到就干，不拖延','面对困难不退缩，敢于尝试','擅长把想法变成现实','在团队中是发动机一样的存在'],
-    suggestions:['想清楚再行动，成功率会更高','学会借力AI，让执行效率翻倍','不要只顾低头干活，偶尔抬头看路','用数据复盘，让执行更精准'],
-    workstyle:'喜欢快速迭代，小步快跑，讨厌无意义的讨论，要做就做。',
-    aitype:'让AI帮你处理信息收集和方案草稿，你专注执行落地。',
-    personModel:'⚡ 活力满满的小闪电，头戴运动发带，穿着运动装，永远在冲刺的状态，表情坚毅。',
-    career:'销售、项目执行、运营、创业者、线下业务'
-  },
-  '协调者型': { 
-    icon:'👥', en:'Coordinator', 
-    desc:'你是那种"整合资源、推动协作"的人。别人各自为战，你能让团队产生1+1>2的效果。', 
-    super:'资源整合 × 团队协作',
-    features:['善于沟通','资源整合','换位思考','推动力强'],
-    personality:'天生就知道怎么让人配合你，懂得平衡各方利益，是团队润滑剂。',
-    strengths:['擅长发现每个人的长处','能协调不同立场，达成共识','会借力AI提升团队整体效率','人脉广，资源整合能力强'],
-    suggestions:['学会在协作中保持自己的判断','用AI处理重复性工作，专注协调价值','不要过度协调，学会适时退出','培养专业深度，让协调更有底气'],
-    workstyle:'喜欢和人打交道，擅长推动跨部门协作，用沟通解决一切问题。',
-    aitype:'让AI帮你整理信息、生成沟通模板，你专注做人的工作。',
-    personModel:'👥 温暖的小太阳，总是带着笑容，身边围着很多小人，性格亲和但有力量。',
-    career:'HR、项目经理、部门负责人、创业者、政府关系、客户成功'
+  '璞玉型': { icon:'💎', en:'Raw Diamond', desc:'你是一块未经雕琢的璞玉。你的直觉敏锐，潜力无限，只是还在探索适合自己的思考方式。', super:'直觉敏锐 + 潜力无限',
+    advantage:['直觉敏锐，能感知别人忽略的东西','思维没有被定型','学习能力强，进步速度快'],
+    suggest:['建立自己的思维框架','多接触新事物激发潜能','让AI帮你理清思路']
   }
 };
 
@@ -762,53 +673,23 @@ function calculateResult() {
     }
   }
   
-  // 确定主类型（8种）
+  // 确定主类型
   const maxDim = pcts.indexOf(Math.max(...pcts));
   const minDim = pcts.indexOf(Math.min(...pcts));
-  const maxPct = Math.max(...pcts);
-  const minPct = Math.min(...pcts);
-  const diff = maxPct - minPct;
   
   let typeKey;
   if (pcts.every(p => p >= 82)) {
     typeKey = '全栈型';
   } else if (pcts.every(p => p < 72)) {
-    typeKey = '潜力股型';
-  } else if (diff < 8) {
-    // 差距小但非全低/全高 → 根据维度组合判断
-    const sum03 = pcts[0] + pcts[3]; // 逻辑+创意
-    const sum12 = pcts[1] + pcts[2]; // 表达+AI
-    if (sum03 > sum12 + 6) {
-      typeKey = '执行者型';
-    } else if (sum12 > sum03 + 6) {
-      typeKey = '协调者型';
-    } else {
-      // 四个都差不多，按最高维度
-      const typeMap = { 0:'思想家型', 1:'表达者型', 2:'AI指挥官型', 3:'创意家型' };
-      typeKey = typeMap[maxDim];
-    }
+    typeKey = '璞玉型';
   } else {
-    // 有明显主导维度
-    const typeMap = { 0:'思想家型', 1:'表达者型', 2:'AI指挥官型', 3:'创意家型' };
-    // 检查是否有组合倾向
-    if (diff >= 8 && diff < 15) {
-      // 有一定差距但不够大，考虑组合
-      const otherHigh = pcts.filter((p, i) => i !== maxDim).sort((a, b) => b - a)[0];
-      if (maxPct - otherHigh < 10) {
-        // 第二名很接近，考虑组合型
-        if ((maxDim === 0 || maxDim === 3) && otherHigh === (maxDim === 0 ? 3 : 0)) {
-          typeKey = '执行者型';
-        } else if ((maxDim === 1 || maxDim === 2) && otherHigh === (maxDim === 1 ? 2 : 1)) {
-          typeKey = '协调者型';
-        } else {
-          typeKey = typeMap[maxDim];
-        }
-      } else {
-        typeKey = typeMap[maxDim];
-      }
-    } else {
-      typeKey = typeMap[maxDim];
-    }
+    const typeMap = {
+      0: '思想家型',
+      1: '表达者型',
+      2: '协作大师型',
+      3: '创意家型'
+    };
+    typeKey = typeMap[maxDim];
   }
   
   const total = Math.round(80 + pcts.reduce((a, b) => a + b, 0) / 400 * 12);
@@ -830,43 +711,43 @@ function render() {
     app.innerHTML = `
       <div class="top-bar">
         <div class="logo">🧠 AI思维测试</div>
-        <div class="step-badge">AI时代</div>
+        <div class="step-badge">灵魂画像</div>
       </div>
       
       <div class="hero">
         <div class="hero-icon">🧠</div>
-        <h1>AI时代思维测试</h1>
-        <p>AI时代，你是什么类型的选手？<br>测出你在AI时代的独特优势和协作模式<br><b>15道题 · 3分钟 · 发现自己</b></p>
+        <h1>AI思维测试</h1>
+        <p>探索你与AI协作的独特思维方式<br>15道题，测出你的真实画像</p>
       </div>
       
       <div class="intro-card">
-        <h3>🎯 测试维度</h3>
+        <h3>测试维度</h3>
         <div class="dim-list">
           <div class="dim-item">
             <div class="dim-icon">🔮</div>
-            <div class="dim-name">逻辑思维</div>
-            <div class="dim-desc">分析问题的深度</div>
+            <div class="dim-name">逻辑推理</div>
+            <div class="dim-desc">分析与拆解</div>
           </div>
           <div class="dim-item">
             <div class="dim-icon">💬</div>
-            <div class="dim-name">表达沟通</div>
-            <div class="dim-desc">说清楚的能力</div>
+            <div class="dim-name">语言表达</div>
+            <div class="dim-desc">叙述与共鸣</div>
           </div>
           <div class="dim-item">
             <div class="dim-icon">🤖</div>
-            <div class="dim-name">人机协作</div>
-            <div class="dim-desc">用AI的效率</div>
+            <div class="dim-name">AI协作</div>
+            <div class="dim-desc">提问与优化</div>
           </div>
           <div class="dim-item">
             <div class="dim-icon">✨</div>
-            <div class="dim-name">创新思维</div>
-            <div class="dim-desc">突破常规的能力</div>
+            <div class="dim-name">创意想象</div>
+            <div class="dim-desc">联想与突破</div>
           </div>
         </div>
       </div>
       
       <button class="start-btn" onclick="startTest()">开始测试</button>
-      <p class="note">⏱️ 约3分钟 · 发现你的AI时代基因</p>
+      <p class="note">⏱️ 约3分钟 · 完全免费</p>
       
       ${history.length > 0 ? `
         <div class="history-section">
@@ -1132,52 +1013,18 @@ function renderResult(app) {
     </div>
     
     <div class="super-section">
-      <div class="super-label">核心标签</div>
-      <div class="feature-tags">
-        ${t.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
-      </div>
-    </div>
-    
-    <div class="super-section">
-      <div class="super-label">💫 人物画像</div>
-      <div class="person-model">${t.personModel}</div>
-    </div>
-    
-    <div class="super-section">
-      <div class="super-label">🎯 你的超能力</div>
+      <div class="super-label">核心优势</div>
       <div class="super-text">${t.super}</div>
     </div>
     
     <div class="result-section">
-      <h3>🧠 性格特点</h3>
-      <div class="desc-text">${t.personality}</div>
+      <h3>你的优势</h3>
+      ${t.advantage.map(a => `<div class="advantage-item">✓ ${a}</div>`).join('')}
     </div>
     
     <div class="result-section">
-      <h3>💪 核心优势</h3>
-      ${t.strengths.map(a => `<div class="advantage-item">✓ ${a}</div>`).join('')}
-    </div>
-    
-    <div class="result-section">
-      <h3>⚡ 工作风格</h3>
-      <div class="desc-text">${t.workstyle}</div>
-    </div>
-    
-    <div class="result-section">
-      <h3>🤖 AI协作方式</h3>
-      <div class="desc-text">${t.aitype}</div>
-    </div>
-    
-    <div class="result-section">
-      <h3>📈 成长建议</h3>
-      ${t.suggestions.map(s => `<div class="suggest-item">→ ${s}</div>`).join('')}
-    </div>
-    
-    <div class="result-section">
-      <h3>💼 适合职业</h3>
-      <div class="career-tags">
-        ${t.career.split('、').map(c => `<span class="career-tag">${c}</span>`).join('')}
-      </div>
+      <h3>成长建议</h3>
+      ${t.suggest.map(s => `<div class="suggest-item">→ ${s}</div>`).join('')}
     </div>
     
     <div class="share-card">
@@ -1209,7 +1056,7 @@ function renderResult(app) {
       </div>
     </div>
     ` : ''}
-  `}
+  `;
   
   if (!showUnlock) {
     setTimeout(drawShareCard, 100);
@@ -1242,7 +1089,7 @@ function drawShareCard() {
   // 标题
   ctx.font = 'bold 36px sans-serif';
   ctx.fillStyle = '#a78bfa';
-  ctx.fillText('AI时代思维测试', 280, 210);
+  ctx.fillText('AI思维测试', 280, 210);
   
   // 类型名
   ctx.font = 'bold 42px sans-serif';
@@ -1255,9 +1102,9 @@ function drawShareCard() {
   ctx.fillText(t.en, 280, 330);
   
   // 分数
-  ctx.font = 'bold 48px sans-serif';
+  ctx.font = 'bold 64px sans-serif';
   ctx.fillStyle = '#818cf8';
-  ctx.fillText(r.total + ' 分', 280, 400);
+  ctx.fillText(r.total + ' 分', 280, 420);
   
   // 雷达图
   const cx = 280, cy = 560, r2 = 100;
@@ -1305,26 +1152,10 @@ function drawShareCard() {
     ctx.fillText(`${['逻辑','表达','协作','创意'][i]} ${pct}%`, x, y);
   });
   
-  // 人物模型
-  ctx.font = '15px sans-serif';
-  ctx.fillStyle = '#fcd34d';
-  ctx.fillText(t.personModel, 280, 450);
-  
-  // 描述
-  ctx.font = '14px sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillText('AI时代，你是什么类型的选手？', 280, 490);
-  
-  // 核心标签
-  ctx.font = '12px sans-serif';
-  ctx.fillStyle = '#a5b4fc';
-  const tagsText = t.features.join(' · ');
-  ctx.fillText(tagsText, 280, 520);
-  
   // 二维码提示
   ctx.font = '12px sans-serif';
   ctx.fillStyle = '#475569';
-  ctx.fillText('扫码测一测你的AI时代基因', 280, 750);
+  ctx.fillText('扫码测试你的AI思维', 280, 750);
   ctx.fillText('czxcyy.github.io/ai', 280, 775);
 }
 
@@ -1332,7 +1163,7 @@ function downloadShare() {
   const canvas = document.getElementById('shareCanvas');
   if (!canvas) return;
   const link = document.createElement('a');
-  link.download = 'AI时代思维测试-' + state.result.type + '.png';
+  link.download = 'AI思维测试-' + state.result.type + '.png';
   link.href = canvas.toDataURL();
   link.click();
 }
