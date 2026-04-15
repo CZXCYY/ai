@@ -1378,13 +1378,13 @@ function declinePrivacy() {
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-  // 绑定开始测试按钮
-  const btnStart = document.getElementById('btnStart');
-  if (btnStart) btnStart.addEventListener('click', startTest);
   if (loadState()) {
     // 恢复状态
   }
   render();
+  // render() 执行后才绑定按钮事件
+  const btnStart = document.getElementById('btnStart');
+  if (btnStart) btnStart.addEventListener('click', startTest);
 });
 
 function showToast(msg) {
