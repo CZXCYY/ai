@@ -195,26 +195,7 @@
 <body>
   <div class="bg-gradient"></div>
   <div class="container" id="app"></div>
-  <div id="privacyModal">
-    <div class="modal-box">
-      <h2>🔒 隐私协议</h2>
-      <div class="modal-content">
-        <h3>数据收集</h3>
-        <p>本测试仅收集你主动提交的回答数据，用于生成测试结果。</p>
-        <p>数据存储在你的本地设备中，不会自动上传至任何服务器。</p>
-        <h3>历史记录</h3>
-        <p>你的测试记录保存在浏览器本地存储中，可随时手动删除。</p>
-        <h3>分享内容</h3>
-        <p>生成的分享图片仅包含测试结果，不包含任何个人信息。</p>
-        <h3>第三方服务</h3>
-        <p>如使用付费解锁功能，支付由第三方支付平台处理，我们不会存储你的支付信息。</p>
-      </div>
-      <div class="modal-btns">
-        <button type="button" class="btn-cancel" id="btnDecline">暂不开始</button>
-        <button type="button" class="btn-accept" id="btnAccept">我已知晓</button>
-      </div>
-    </div>
-  </div>
+
 
 <script>
 // ============ 题库 ============
@@ -1369,10 +1350,7 @@ function verifyCode() {
 
 // ============ 启动 ============
 function startTest() {
-  if (!getPrivacy()) {
-    document.getElementById('privacyModal').classList.remove('hidden');
-    return;
-  }
+  // 隐私已同意，直接开始
   
   state = {
     view: 'question',
@@ -1400,15 +1378,6 @@ function declinePrivacy() {
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-  // 如果隐私已同意，隐藏弹窗
-  if (getPrivacy()) {
-    document.getElementById('privacyModal').classList.add('hidden');
-  }
-  // 绑定隐私弹窗按钮事件
-  const btnAccept = document.getElementById('btnAccept');
-  const btnDecline = document.getElementById('btnDecline');
-  if (btnAccept) btnAccept.addEventListener('click', acceptPrivacy);
-  if (btnDecline) btnDecline.addEventListener('click', declinePrivacy);
   if (loadState()) {
     // 恢复状态
   }
