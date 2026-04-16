@@ -91,12 +91,13 @@
     
     /* 排序题 */
     .sort-items { display: flex; flex-direction: column; gap: 8px; }
-    .sort-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; cursor: grab; transition: all 0.2s; user-select: none; }
-    .sort-item:active { cursor: grabbing; }
-    .sort-item.dragging { opacity: 0.5; border-color: #6366f1; }
-    .sort-item.drag-over { border-color: #a78bfa; background: rgba(139,92,246,0.08); }
-    .sort-num { width: 26px; height: 26px; background: rgba(99,102,241,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #818cf8; flex-shrink: 0; }
-    .sort-text { font-size: 14px; flex: 1; }
+    .sort-item { display: flex; align-items: center; gap: 10px; padding: 12px 10px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.2s; }
+    .sort-num { width: 28px; height: 28px; background: rgba(99,102,241,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #818cf8; flex-shrink: 0; }
+    .sort-text { font-size: 14px; flex: 1; line-height: 1.4; }
+    .sort-btns { display: flex; flex-direction: column; gap: 4px; }
+    .sort-btn { width: 28px; height: 22px; background: rgba(99,102,241,0.15); border: none; border-radius: 6px; color: #818cf8; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .sort-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .sort-btn:active { background: rgba(99,102,241,0.4); }
     .sort-hint { font-size: 12px; color: #64748b; margin-top: 12px; }
     .sort-confirm-btn { display: block; width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, #6366f1, #7c3aed); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; }
     
@@ -748,13 +749,17 @@
         bodyHtml = `
           <div class="sort-items" id="sortList">
             ${order.map((itemIdx, position) => `
-              <div class="sort-item" draggable="true" data-idx="${position}" data-item="${itemIdx}">
+              <div class="sort-item" data-idx="${position}" data-item="${itemIdx}">
                 <div class="sort-num">${position + 1}</div>
                 <div class="sort-text">${q.items[itemIdx]}</div>
+                <div class="sort-btns">
+                  <button class="sort-btn" onclick="moveSortItem(${position}, -1)" ${position === 0 ? 'disabled' : ''}>↑</button>
+                  <button class="sort-btn" onclick="moveSortItem(${position}, 1)" ${position === order.length - 1 ? 'disabled' : ''}>↓</button>
+                </div>
               </div>
             `).join('')}
           </div>
-          <div class="sort-hint">📌 拖动调整顺序，完成后点击"确认"按钮</div>
+          <div class="sort-hint">📌 点击 ↑↓ 调整顺序，完成后点击"确认"按钮</div>
           <button class="sort-confirm-btn" onclick="confirmSort()">确认排序 →</button>`;
       }
       
@@ -844,12 +849,39 @@
       });
     }
     
+    function moveSortItem(position, direction) {
+      const q = state.questions[state.current];
+      const order = state.answers[q.realId] ? [...state.answers[q.realId]] : [0,1,2,3];
+      const newPos = position + direction;
+      if (newPos < 0 || newPos >= order.length) return;
+      
+      // 交换位置
+      [order[position], order[newPos]] = [order[newPos], order[position]];
+      state.answers[q.realId] = order;
+      saveState();
+      
+      // 重新渲染排序题
+      const qData = state.questions[state.current];
+      const list = document.getElementById('sortList');
+      list.innerHTML = order.map((itemIdx, pos) => `
+        <div class="sort-item" data-idx="${pos}" data-item="${itemIdx}">
+          <div class="sort-num">${pos + 1}</div>
+          <div class="sort-text">${qData.items[itemIdx]}</div>
+          <div class="sort-btns">
+            <button class="sort-btn" onclick="moveSortItem(${pos}, -1)" ${pos === 0 ? 'disabled' : ''}>↑</button>
+            <button class="sort-btn" onclick="moveSortItem(${pos}, 1)" ${pos === order.length - 1 ? 'disabled' : ''}>↓</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
     function confirmSort() {
       const q = state.questions[state.current];
-      const list = document.getElementById('sortList');
-      const order = [...list.querySelectorAll('.sort-item')].map(el => parseInt(el.dataset.item));
-      
-      state.answers[q.realId] = order;
+      const order = state.answers[q.realId];
+      if (!order) {
+        showToast('请先调整排序');
+        return;
+      }
       saveState();
       showToast('已保存');
       
