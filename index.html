@@ -690,7 +690,9 @@
       if (PAY_ENABLED) {
         document.getElementById('payBtn').addEventListener('click', showPayDialog);
       } else {
-        document.getElementById('startBtn').addEventListener('click', startTest);
+        document.getElementById('startBtn').addEventListener('click', () => {
+          document.getElementById('privacyModal').classList.remove('hidden');
+        });
       }
     }
     
