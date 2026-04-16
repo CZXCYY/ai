@@ -91,13 +91,13 @@
     
     /* 排序题 */
     .sort-items { display: flex; flex-direction: column; gap: 8px; }
-    .sort-item { display: flex; align-items: center; gap: 10px; padding: 12px 10px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.2s; }
+    .sort-item { display: flex; align-items: center; gap: 10px; padding: 12px 10px; background: rgba(15,23,42,0.5); border: 2px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; }
     .sort-num { width: 28px; height: 28px; background: rgba(99,102,241,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #818cf8; flex-shrink: 0; }
     .sort-text { font-size: 14px; flex: 1; line-height: 1.4; }
-    .sort-btns { display: flex; flex-direction: column; gap: 4px; }
-    .sort-btn { width: 28px; height: 22px; background: rgba(99,102,241,0.15); border: none; border-radius: 6px; color: #818cf8; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .sort-btns { display: flex; flex-direction: row; gap: 6px; }
+    .sort-btn { min-width: 44px; height: 36px; background: rgba(99,102,241,0.15); border: none; border-radius: 8px; color: #818cf8; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
     .sort-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .sort-btn:active { background: rgba(99,102,241,0.4); }
+    .sort-btn:active { background: rgba(99,102,241,0.4); transform: scale(0.94); }
     .sort-hint { font-size: 12px; color: #64748b; margin-top: 12px; }
     .sort-confirm-btn { display: block; width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, #6366f1, #7c3aed); border: none; border-radius: 12px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; }
     
@@ -604,6 +604,48 @@
       }
       return a;
     }
+
+    // ============ 设备指纹 & 分桶 ============
+    function genFingerprint() {
+      const seed = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        screen.colorDepth,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || Math.ceil(Math.random() * 8 + 2),
+      ].join('|');
+      // 简单哈希
+      let h = 0x811c9dc5;
+      for (let i = 0; i < seed.length; i++) {
+        h ^= seed.charCodeAt(i);
+        h = (h * 0x01000193) >>> 0;
+      }
+      return h.toString(16);
+    }
+
+    function getFingerprint() {
+      try {
+        let fp = localStorage.getItem('aimind_fp');
+        if (!fp) {
+          fp = genFingerprint();
+          localStorage.setItem('aimind_fp', fp);
+        }
+        return fp;
+      } catch { return Math.random().toString(16); }
+    }
+
+    // 分桶：70%控分(最高88) / 30%高分(可达95)
+    // 用指纹哈希决定桶，不重复、不透明
+    function getScoreBucket() {
+      const fp = getFingerprint();
+      let h = 0x811c9dc5;
+      for (let i = 0; i < fp.length; i++) {
+        h ^= fp.charCodeAt(i);
+        h = (h * 0x01000193) >>> 0;
+      }
+      return (h % 10) < 3 ? 'high' : 'controlled'; // 前30%=high，后70%=controlled
+    }
     
     function generateQuestions() {
       const choices = shuffle(questionBank.choice).slice(0, 8);
@@ -633,7 +675,7 @@
     
     function saveState() {
       localStorage.setItem('aimind_s', JSON.stringify({
-        view:state.view, current:state.current, questions:state.questions, answers:state.answers, completed:state.completed, result:state.result
+        view:state.view, current:state.current, questions:state.questions, answers:state.answers, completed:state.completed, result:state.result, scoreBucket:state.scoreBucket
       }));
     }
     
@@ -707,6 +749,7 @@
       state.completed = false;
       state.result = null;
       state.shared = false;
+      state.scoreBucket = getScoreBucket(); // 分桶：high=前30%，controlled=后70%
       saveState();
       render();
     }
@@ -790,8 +833,7 @@
           </div>
           <div class="nav-row">
             <button class="nav-btn nav-prev" ${state.current===0?'disabled':''} onclick="prevQ()">← 上一题</button>
-            ${isLastQ ? 
-              `<button class="nav-btn nav-next" onclick="submitTest()">查看结果 →</button>` :
+            ${isLastQ ? '' : 
               `<button class="nav-btn nav-next" onclick="nextQ()">下一题 →</button>`
             }
           </div>
@@ -875,28 +917,30 @@
       `).join('');
     }
     
+    let sortConfirmed = false;
     function confirmSort() {
+      if (sortConfirmed) return;
+      sortConfirmed = true;
       const q = state.questions[state.current];
       const order = state.answers[q.realId];
       if (!order) {
+        sortConfirmed = false;
         showToast('请先调整排序');
         return;
       }
       saveState();
-      showToast('已保存');
-      
-      setTimeout(() => {
-        if (state.current < state.questions.length - 1) {
-          nextQ();
-        } else {
-          // 在最后一题时，render会显示"查看结果"按钮
-          render();
-        }
-      }, 500);
+      setTimeout(() => { sortConfirmed = false; }, 1000); // 1秒后解锁
+      if (state.current < state.questions.length - 1) {
+        nextQ();
+      } else {
+        submitTest();
+      }
     }
     
     function selectOption(idx) {
       const q = state.questions[state.current];
+      // 排序题不响应选项点击（排序题有自己的确认按钮）
+      if (q.qType === 'sort') return;
       state.answers[q.realId] = idx;
       saveState();
       
@@ -909,14 +953,11 @@
       }
       
       // 非排序题：自动跳转
-      setTimeout(() => {
-        if (state.current < state.questions.length - 1) {
-          nextQ();
-        } else {
-          // 最后一道题刷新显示"查看结果"
-          render();
-        }
-      }, 300);
+      if (state.current < state.questions.length - 1) {
+        nextQ();
+      } else {
+        submitTest();
+      }
     }
     
     function nextQ() {
@@ -935,7 +976,10 @@
       }
     }
     
+    let testSubmitted = false;
     function submitTest() {
+      if (testSubmitted) return;
+      testSubmitted = true;
       // 检查是否有未作答
       const unanswered = state.questions.filter(q => {
         if (q.qType === 'sort') {
@@ -1056,10 +1100,14 @@
         }
       }
       
-      // 分数：85-95
+      // 分数：控分区85-88，高分区85-95
+      // 70%用户（controlled）最高88，30%用户（high）可达95
+      const bucket = state.scoreBucket || getScoreBucket();
       const baseScore = 85;
       const abilityBonus = Math.round((pcts.reduce((s,p) => s+p, 0) / 4) - 70);
-      const totalScore = Math.min(95, Math.max(85, baseScore + abilityBonus));
+      const rawScore = baseScore + abilityBonus;
+      const maxScore = bucket === 'high' ? 95 : 88;
+      const totalScore = Math.min(maxScore, Math.max(85, rawScore));
       
       state.result = { total: totalScore, type: mainType, pcts, dimMainTags };
     }
