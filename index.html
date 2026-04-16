@@ -1037,9 +1037,6 @@
       const r = state.result;
       const t = types[r.type];
       
-      // 分享解锁逻辑：测试后必须分享才能看完整结果
-      const showShareUnlock = !state.shared;
-      
       document.getElementById('app').innerHTML = `
         <div class="top-bar">
           <div class="logo">🧠 AI思维测试</div>
@@ -1066,7 +1063,6 @@
             </div>
           `).join('')}
         </div>
-        ${!showShareUnlock ? `
         <div class="detail-card">
           <h3>💫 人物模型</h3>
           <div class="person-model">${t.personModel}</div>
@@ -1108,34 +1104,13 @@
           </div>
         </div>
         <div class="quote-box">"${t.super}"</div>
-        <button class="share-btn" onclick="downloadAndShare()">🖼️ 保存分享图</button>
-        ` : `
-        <div class="share-unlock-card">
-          <div class="share-unlock-icon">🎁</div>
-          <div class="share-unlock-title">分享即可解锁完整结果</div>
-          <div class="share-unlock-desc">生成你的专属测试结果图片<br>分享给朋友或发到朋友圈<br>即可解锁完整分析报告</div>
-          <button class="share-btn" onclick="downloadAndShare()">🖼️ 生成并保存分享图</button>
-          <p class="share-hint">保存图片后分享给好友，即可解锁完整结果</p>
-        </div>
-        `}
+        <button class="share-btn" onclick="downloadShare()">🖼️ 保存分享图</button>
         <div class="bottom-btns">
           <button class="bottom-btn" onclick="restartTest()">🔄 重新测试</button>
           <button class="bottom-btn" onclick="goHome()">🏠 返回首页</button>
         </div>
         <p class="footer-note">测试结果仅供娱乐参考，每种思维方式都有其独特价值</p>
       `;
-    }
-
-    function downloadAndShare() {
-      // 生成并下载分享图
-      downloadShare();
-      // 标记已分享，解锁完整结果
-      state.shared = true;
-      state.paid = true;
-      saveState();
-      // 重新渲染显示完整结果
-      renderResult();
-      showToast('已解锁完整分析报告！');
     }
 
     function showPayDialog() {
