@@ -584,7 +584,7 @@
     // ========== 收款配置 ==========
     const PAY_ENABLED = false; // 是否启用收款（暂时关闭）
     const PAY_PRICE = '1元'; // 解锁价格
-    const PAY_DESC = '解锁完整分析报告（含人物模型详解+职业建议+AI协作指南）';
+    const PAY_DESC = '解锁完整分析报告（含详细分析+职业建议+AI协作指南）';
     
     let state = { view:'welcome', current:0, questions:[], answers:{}, completed:false, result:null, unlocked:false, paid:false, shared:false };
     
@@ -1062,10 +1062,6 @@
               <span class="ability-pct" style="color:${dimColors[i]}">${p}%</span>
             </div>
           `).join('')}
-        </div>
-        <div class="detail-card">
-          <h3>💫 人物模型</h3>
-          <div class="person-model">${t.personModel}</div>
         </div>
         <div class="detail-card">
           <h3>🏷️ 核心特征</h3>
