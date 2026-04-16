@@ -150,6 +150,12 @@
     .career-tag { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); border-radius: 8px; padding: 5px 12px; font-size: 12px; color: #6ee7b7; }
     
     .unlock-card { background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.08)); border: 2px solid rgba(99,102,241,0.3); border-radius: 20px; padding: 28px; margin-bottom: 18px; text-align: center; }
+    
+    .share-unlock-card { background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(5,150,105,0.08)); border: 2px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 32px 24px; margin-bottom: 18px; text-align: center; }
+    .share-unlock-icon { font-size: 56px; margin-bottom: 16px; }
+    .share-unlock-title { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .share-unlock-desc { font-size: 13px; color: #94a3b8; line-height: 1.7; margin-bottom: 20px; }
+    .share-hint { font-size: 11px; color: #64748b; margin-top: 12px; }
     .unlock-icon { font-size: 48px; margin-bottom: 12px; }
     .unlock-title { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
     .unlock-desc { font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 16px; }
@@ -580,7 +586,7 @@
     const PAY_PRICE = '1元'; // 解锁价格
     const PAY_DESC = '解锁完整分析报告（含人物模型详解+职业建议+AI协作指南）';
     
-    let state = { view:'welcome', current:0, questions:[], answers:{}, completed:false, result:null, unlocked:false };
+    let state = { view:'welcome', current:0, questions:[], answers:{}, completed:false, result:null, unlocked:false, paid:false, shared:false };
     
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -646,6 +652,11 @@
     
     function renderWelcome() {
       const history = getHistory();
+      const payBtn = PAY_ENABLED ? `
+        <button class="start-btn" id="payBtn" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🔓 解锁测试（${PAY_PRICE}）</button>
+        <p class="note">付费后永久解锁，可重复测试</p>
+      ` : `<button class="start-btn" id="startBtn">开始测试 →</button>`;
+      
       document.getElementById('app').innerHTML = `
         <div class="top-bar">
           <div class="logo">🧠 AI思维测试</div>
@@ -653,19 +664,19 @@
         </div>
         <div class="hero">
           <div class="hero-icon">🧠</div>
-          <h1>灵魂画像</h1>
-          <p>探索你与AI协作的独特思维方式<br>15道题，5-8分钟，找到你的思维天赋</p>
+          <h1>AI时代思维测试</h1>
+          <p>测出你在AI时代的独特优势<br>发现你的8种思维类型<br>15道题 · 3分钟 · 找到你的思维基因</p>
         </div>
         <div class="intro-card">
-          <h3>📊 测试四大维度</h3>
+          <h3>🎯 测试四大维度</h3>
           <div class="dim-list">
-            <div class="dim-item"><div class="dim-icon">🔮</div><div class="dim-name">逻辑推理</div><div class="dim-desc">缜密与因果</div></div>
-            <div class="dim-item"><div class="dim-icon">💬</div><div class="dim-name">语言表达</div><div class="dim-desc">清晰与感染</div></div>
-            <div class="dim-item"><div class="dim-icon">🤖</div><div class="dim-name">AI协作</div><div class="dim-desc">人机配合</div></div>
-            <div class="dim-item"><div class="dim-icon">✨</div><div class="dim-name">创意想象</div><div class="dim-desc">突破边界</div></div>
+            <div class="dim-item"><div class="dim-icon">🔮</div><div class="dim-name">逻辑思维</div><div class="dim-desc">分析问题的深度</div></div>
+            <div class="dim-item"><div class="dim-icon">💬</div><div class="dim-name">表达沟通</div><div class="dim-desc">说清楚的能力</div></div>
+            <div class="dim-item"><div class="dim-icon">🤖</div><div class="dim-name">AI协作</div><div class="dim-desc">用AI的效率</div></div>
+            <div class="dim-item"><div class="dim-icon">✨</div><div class="dim-name">创新思维</div><div class="dim-desc">突破常规的能力</div></div>
           </div>
         </div>
-        <button class="start-btn" id="startBtn">开始测试 →</button>
+        ${payBtn}
         <p class="note">每种思维方式都有独特价值，没有"正确答案"</p>
         ${history.length > 0 ? `<div class="history-section">
           <div class="history-title">📋 历史记录</div>
@@ -675,20 +686,27 @@
           </div>`).join('')}
         </div>` : ''}
       `;
-      document.getElementById('startBtn').addEventListener('click', () => {
-        document.getElementById('privacyModal').classList.remove('hidden');
-      });
+      
+      if (PAY_ENABLED) {
+        document.getElementById('payBtn').addEventListener('click', showPayDialog);
+      } else {
+        document.getElementById('startBtn').addEventListener('click', startTest);
+      }
     }
     
     function startTest() {
-      localStorage.setItem('aimind_privacy', '1');
-      document.getElementById('privacyModal').classList.add('hidden');
+      // 如果启用支付，检查是否已支付
+      if (PAY_ENABLED && !state.paid) {
+        showPayDialog();
+        return;
+      }
       state.questions = generateQuestions();
       state.view = 'test';
       state.current = 0;
       state.answers = {};
       state.completed = false;
       state.result = null;
+      state.shared = false;
       saveState();
       render();
     }
@@ -1020,7 +1038,8 @@
       const r = state.result;
       const t = types[r.type];
       
-      const showUnlock = PAY_ENABLED && !state.unlocked;
+      // 分享解锁逻辑：测试后必须分享才能看完整结果
+      const showShareUnlock = !state.shared;
       
       document.getElementById('app').innerHTML = `
         <div class="top-bar">
@@ -1048,10 +1067,7 @@
             </div>
           `).join('')}
         </div>
-        <div class="desc-card">
-          <p>${t.desc}</p>
-        </div>
-        ${!showUnlock ? `
+        ${!showShareUnlock ? `
         <div class="detail-card">
           <h3>💫 人物模型</h3>
           <div class="person-model">${t.personModel}</div>
@@ -1093,17 +1109,16 @@
           </div>
         </div>
         <div class="quote-box">"${t.super}"</div>
+        <button class="share-btn" onclick="downloadAndShare()">🖼️ 保存分享图</button>
         ` : `
-        <div class="unlock-card">
-          <div class="unlock-icon">🔒</div>
-          <div class="unlock-title">解锁完整分析报告</div>
-          <div class="unlock-desc">${PAY_DESC}</div>
-          <div class="unlock-price">${PAY_PRICE}</div>
-          <button class="pay-btn" onclick="showPayDialog()">立即解锁</button>
-          <p class="unlock-hint">支付后联系客服获取解锁码</p>
+        <div class="share-unlock-card">
+          <div class="share-unlock-icon">🎁</div>
+          <div class="share-unlock-title">分享即可解锁完整结果</div>
+          <div class="share-unlock-desc">生成你的专属测试结果图片<br>分享给朋友或发到朋友圈<br>即可解锁完整分析报告</div>
+          <button class="share-btn" onclick="downloadAndShare()">🖼️ 生成并保存分享图</button>
+          <p class="share-hint">保存图片后分享给好友，即可解锁完整结果</p>
         </div>
         `}
-        <button class="share-btn" onclick="downloadShare()">🖼️ 生成分享图片</button>
         <div class="bottom-btns">
           <button class="bottom-btn" onclick="restartTest()">🔄 重新测试</button>
           <button class="bottom-btn" onclick="goHome()">🏠 返回首页</button>
@@ -1112,23 +1127,37 @@
       `;
     }
 
+    function downloadAndShare() {
+      // 生成并下载分享图
+      downloadShare();
+      // 标记已分享，解锁完整结果
+      state.shared = true;
+      state.paid = true;
+      saveState();
+      // 重新渲染显示完整结果
+      renderResult();
+      showToast('已解锁完整分析报告！');
+    }
+
     function showPayDialog() {
       const r = state.result;
-      const t = types[r.type];
+      const isAfterTest = r && state.view === 'result';
+      const t = isAfterTest ? types[r.type] : null;
+      
       document.getElementById('app').innerHTML += `
         <div class="pay-modal" id="payModal">
           <div class="pay-box">
-            <h2>🔓 解锁完整报告</h2>
-            <p class="pay-type">${t.icon} ${r.type}</p>
-            <p class="pay-desc">${PAY_DESC}</p>
+            <h2>🔓 ${isAfterTest ? '解锁完整报告' : '解锁测试'}</h2>
+            ${isAfterTest ? `<p class="pay-type">${t.icon} ${r.type}</p>` : ''}
+            <p class="pay-desc">${isAfterTest ? PAY_DESC : '解锁后可开始测试，解锁完整分析报告'}</p>
             <div class="pay-price">${PAY_PRICE}</div>
             <div class="qr-placeholder">
-              <p>📱 请扫码支付</p>
+              <p>📱 请扫码支付 ${PAY_PRICE}</p>
               <p class="pay-contact">支付后联系客服获取解锁码</p>
             </div>
             <input type="text" id="unlockCode" placeholder="输入解锁码" class="code-input">
             <button class="pay-btn" onclick="verifyCode()">验证解锁</button>
-            <button class="close-btn" onclick="closePayDialog()">关闭</button>
+            <button class="close-btn" onclick="closePayDialog()">${isAfterTest ? '关闭' : '返回'}</button>
           </div>
         </div>
       `;
@@ -1142,12 +1171,20 @@
     function verifyCode() {
       const code = document.getElementById('unlockCode').value.trim();
       // 示例解锁码，可自行修改
-      const validCodes = ['AI2024', 'TEST99', 'MIND888', 'UNLOCK'];
+      const validCodes = ['AI2024', 'TEST99', 'MIND888', 'UNLOCK', 'OPEN', 'FREE', 'TEST'];
       if (validCodes.includes(code)) {
         state.unlocked = true;
+        state.paid = true;
         saveState();
         closePayDialog();
-        renderResult();
+        
+        // 如果是测试前解锁，开始测试；如果是测试后解锁，显示完整结果
+        if (state.view === 'welcome') {
+          startTest();
+        } else {
+          state.shared = true; // 付费解锁也标记为已分享
+          renderResult();
+        }
         showToast('解锁成功！');
       } else {
         showToast('解锁码无效，请联系客服获取');
@@ -1162,6 +1199,8 @@
       state.completed = false;
       state.result = null;
       state.unlocked = false;
+      state.paid = false;
+      state.shared = false;
       saveState();
       render();
     }
