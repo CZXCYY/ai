@@ -582,7 +582,7 @@
     };
 
     // ========== 收款配置 ==========
-    const PAY_ENABLED = true; // 是否启用收款
+    const PAY_ENABLED = false; // 是否启用收款（暂时关闭）
     const PAY_PRICE = '1元'; // 解锁价格
     const PAY_DESC = '解锁完整分析报告（含人物模型详解+职业建议+AI协作指南）';
     
@@ -697,11 +697,8 @@
     }
     
     function startTest() {
-      // 如果启用支付，检查是否已支付
-      if (PAY_ENABLED && !state.paid) {
-        showPayDialog();
-        return;
-      }
+      // 隐藏隐私弹窗，开始测试
+      document.getElementById('privacyModal').classList.add('hidden');
       state.questions = generateQuestions();
       state.view = 'test';
       state.current = 0;
