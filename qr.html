@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI时代思维测试 - 二维码</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #080810;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      max-width: 400px;
+    }
+    .logo { font-size: 48px; margin-bottom: 20px; }
+    h1 { font-size: 24px; margin-bottom: 10px; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .desc { color: #94a3b8; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
+    .qr-box {
+      background: white;
+      padding: 16px;
+      border-radius: 16px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .qr-box img { display: block; width: 200px; height: 200px; }
+    .url { color: #6366f1; font-size: 13px; margin-bottom: 20px; word-break: break-all; }
+    .note { color: #64748b; font-size: 12px; }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #6366f1, #7c3aed);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🧠</div>
+    <h1>AI时代思维测试</h1>
+    <p class="desc">
+      测出你在AI时代的独特优势<br>
+      发现你的8种思维类型<br>
+      15道题 · 3分钟 · 找到答案
+    </p>
+    <div class="qr-box">
+      <img id="qrcode" src="" alt="二维码">
+    </div>
+    <p class="url">czxcyy.github.io/ai</p>
+    <p class="note">扫码开始测试，探索你的思维基因</p>
+    <a class="btn" id="downloadBtn" download="AI思维测试二维码.png">下载二维码</a>
+  </div>
+  
+  <script>
+    // 使用QR Server API生成二维码
+    const url = 'https://czxcyy.github.io/ai';
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+    
+    document.getElementById('qrcode').src = qrUrl;
+    
+    document.getElementById('downloadBtn').addEventListener('click', async function(e) {
+      e.preventDefault();
+      
+      try {
+        const response = await fetch(qrUrl);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = 'AI思维测试二维码.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch(err) {
+        // 如果fetch失败，尝试直接下载
+        window.location.href = qrUrl + '&download=1';
+      }
+    });
+  </script>
+</body>
+</html>
