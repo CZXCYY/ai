@@ -834,9 +834,9 @@
             ${bodyHtml}
           </div>
           <div class="nav-row">
-            <button class="nav-btn nav-prev" ${state.current===0?'disabled':''} onclick="prevQ()">← 上一题</button>
-            ${isLastQ ? '' : 
-              `<button class="nav-btn nav-next" onclick="nextQ()">下一题 →</button>`
+            ${isLastQ ? 
+              `<button class="nav-btn nav-next" style="flex:1" onclick="submitTest()">查看结果 →</button>` :
+              `<button class="nav-btn nav-next" style="flex:1" onclick="nextQ()">下一题 →</button>`
             }
           </div>
         </div>`;
