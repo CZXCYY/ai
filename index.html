@@ -847,10 +847,12 @@
       
       // 统一用 addEventListener 绑定，防止 onclick 字符串解析失效
       setTimeout(() => {
+        console.log('[DEBUG] setTimeout callback running');
         const btnSubmit = document.getElementById('btnSubmit');
         const btnNext = document.getElementById('btnNext');
-        if (btnSubmit) btnSubmit.addEventListener('click', submitTest);
-        if (btnNext) btnNext.addEventListener('click', nextQ);
+        console.log('[DEBUG] btnSubmit:', btnSubmit, 'btnNext:', btnNext);
+        if (btnSubmit) { btnSubmit.addEventListener('click', submitTest); console.log('[DEBUG] submit listener attached'); }
+        if (btnNext) { btnNext.addEventListener('click', nextQ); }
       }, 0);
     }
     
@@ -988,6 +990,7 @@
     }
     
     function submitTest() {
+      console.log('[DEBUG] submitTest called!');
       calculateResult();
       state.view = 'result';
       state.completed = true;
