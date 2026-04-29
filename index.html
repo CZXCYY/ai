@@ -921,17 +921,16 @@
     
     let sortConfirmed = false;
     function confirmSort() {
-      if (sortConfirmed) return;
-      sortConfirmed = true;
       const q = state.questions[state.current];
       const order = state.answers[q.realId];
       if (!order) {
-        sortConfirmed = false;
         showToast('请先调整排序');
         return;
       }
       saveState();
-      setTimeout(() => { sortConfirmed = false; }, 1000); // 1秒后解锁
+      // 锁定防止重复提交，1秒后自动解锁
+      sortConfirmed = true;
+      setTimeout(() => { sortConfirmed = false; }, 1000);
       if (state.current < state.questions.length - 1) {
         nextQ();
       } else {
@@ -978,11 +977,10 @@
       }
     }
     
-    let testSubmitted = false;
     function submitTest() {
-      if (testSubmitted) return;
-      testSubmitted = true;
-      // 检查是否有未作答
+      // 重置所有标志，确保每次调用都能正常执行
+      testSubmitted = false;
+      sortConfirmed = false;
       const unanswered = state.questions.filter(q => {
         if (q.qType === 'sort') {
           return state.answers[q.realId] === undefined;
