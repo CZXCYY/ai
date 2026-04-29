@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🧠 AI思维测试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#080810;color:#f1f5f9;min-height:100vh;-webkit-tap-highlight-color:transparent}
+#app{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+
+/* ===== 欢迎页 ===== */
+.welcome{text-align:center;max-width:380px}
+.welcome-icon{font-size:80px;margin-bottom:20px}
+.welcome-title{font-size:28px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.welcome-desc{font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:32px}
+.start-btn{padding:16px 56px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(99,102,241,0.4)}
+
+/* ===== 隐私弹窗 ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px}
+.modal-overlay.hidden{display:none}
+.modal-card{background:#1e293b;border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:32px 24px;max-width:380px;width:100%;text-align:center}
+.modal-title{font-size:20px;font-weight:700;margin-bottom:16px}
+.modal-body{font-size:14px;color:#94a3b8;line-height:1.7;text-align:left;margin-bottom:24px}
+.modal-body p{margin-bottom:10px}
+.accept-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer}
+
+/* ===== 顶部栏 ===== */
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:460px;margin-bottom:14px}
+.logo{font-size:15px;font-weight:700;color:#818cf8}
+.step-badge{background:rgba(99,102,241,0.15);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+
+/* ===== 进度条 ===== */
+.progress-wrap{width:100%;max-width:460px;margin-bottom:18px}
+.progress-track{height:4px;background:rgba(255,255,255,0.08);border-radius:4px}
+.progress-thumb{height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:4px;transition:width .35s}
+.progress-dots{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.p-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.12);transition:all .2s}
+.p-dot.done{background:#6366f1}
+.p-dot.active{background:#a78bfa;transform:scale(1.4)}
+
+/* ===== 题目卡片 ===== */
+.card{background:rgba(30,41,59,0.5);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:24px;width:100%;max-width:460px;margin-bottom:14px}
+.q-meta{display:flex;align-items:center;margin-bottom:14px}
+.q-tag{display:inline-block;background:rgba(99,102,241,0.15);color:#a5b4fc;font-size:11px;padding:3px 10px;border-radius:20px}
+.q-dim{color:#64748b;font-size:12px;margin-left:8px}
+.question-text{font-size:15px;font-weight:600;line-height:1.65;margin-bottom:20px}
+
+/* ===== 选择题选项 ===== */
+.option{display:flex;align-items:center;padding:13px 14px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:9px;cursor:pointer;transition:all .2s;touch-action:manipulation}
+.option:hover{border-color:rgba(99,102,241,0.45);background:rgba(99,102,241,0.07)}
+.option.selected{border-color:#6366f1;background:rgba(99,102,241,0.15)}
+.opt-letter{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);margin-right:11px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#818cf8;flex-shrink:0;transition:all .2s}
+.option.selected .opt-letter{border-color:#6366f1;background:#6366f1;color:white}
+.opt-text{font-size:14px;color:#e2e8f0}
+
+/* ===== 判断题 ===== */
+.tf-options{display:flex;gap:12px}
+.tf-btn{flex:1;padding:18px 10px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:13px;cursor:pointer;text-align:center;transition:all .2s;touch-action:manipulation}
+.tf-btn:hover{border-color:rgba(99,102,241,0.45)}
+.tf-btn.selected{border-color:#6366f1;background:rgba(99,102,241,0.15)}
+.tf-icon{font-size:30px;margin-bottom:6px;display:block}
+.tf-label{font-size:14px;font-weight:600}
+.tf-desc{font-size:11px;color:#64748b;margin-top:3px}
+
+/* ===== 排序题 ===== */
+.sort-list{margin-bottom:10px}
+.sort-item{display:flex;align-items:center;padding:13px 14px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px;gap:10px}
+.sort-rank{width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.2);color:#818cf8;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sort-text{flex:1;font-size:14px}
+.sort-btns{display:flex;gap:6px}
+.sort-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;width:32px;height:32px;cursor:pointer;color:#94a3b8;font-size:14px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.sort-btn:hover{background:rgba(255,255,255,0.12)}
+.sort-btn:disabled{opacity:0.3;cursor:not-allowed}
+.sort-hint{font-size:12px;color:#475569;margin-bottom:12px}
+
+/* ===== 按钮 ===== */
+.btn-primary{width:100%;padding:15px;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;box-shadow:0 4px 16px rgba(99,102,241,0.3);touch-action:manipulation}
+.btn-primary:active{opacity:0.88}
+.btn-secondary{width:100%;padding:13px;border:none;border-radius:13px;font-size:13px;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.07);color:#94a3b8;touch-action:manipulation}
+.btn-secondary:active{background:rgba(255,255,255,0.12)}
+.btn-row{display:flex;gap:10px;width:100%;max-width:460px}
+.btn-row .btn-primary{flex:1}
+.btn-row .btn-secondary{flex:1}
+
+/* ===== 结果页 ===== */
+.result-hero{text-align:center;padding:12px 0 24px}
+.result-score{font-size:88px;font-weight:800;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.result-label{color:#64748b;font-size:13px;margin-bottom:16px}
+.type-badge{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:40px;font-size:16px;font-weight:700}
+
+/* 解锁卡片 */
+.unlock-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.06));border:2px solid rgba(16,185,129,0.3);border-radius:20px;padding:28px 24px;margin-bottom:16px;text-align:center}
+.unlock-icon{font-size:48px;margin-bottom:12px}
+.unlock-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.unlock-desc{font-size:13px;color:#94a3b8;line-height:1.7;margin-bottom:14px}
+.score-display{font-size:32px;font-weight:800;color:#10b981;margin:12px 0}
+.unlock-note{font-size:11px;color:#475569;margin-bottom:16px}
+.share-btn{width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(16,185,129,0.3);touch-action:manipulation}
+
+/* 能力雷达 */
+.ability-card{background:rgba(30,41,59,0.5);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:20px;width:100%;max-width:460px;margin-bottom:14px}
+.ability-card h3{font-size:14px;font-weight:700;margin-bottom:14px}
+.ability-row{display:flex;align-items:center;margin-bottom:12px;gap:10px}
+.ability-name{font-size:12px;color:#94a3b8;width:64px;flex-shrink:0}
+.ability-bar-bg{flex:1;height:7px;background:rgba(255,255,255,0.07);border-radius:4px}
+.ability-bar-fill{height:100%;border-radius:4px;transition:width .6s}
+.ability-pct{font-size:12px;font-weight:700;width:34px;text-align:right}
+
+/* 特征卡片 */
+.detail-card{background:rgba(30,41,59,0.5);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:20px;width:100%;max-width:460px;margin-bottom:14px}
+.detail-card h3{font-size:14px;font-weight:700;margin-bottom:12px}
+.feature-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tag{background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:12px}
+.type-desc{font-size:13px;color:#94a3b8;line-height:1.7}
+
+/* Toast */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.88);color:white;padding:11px 22px;border-radius:10px;font-size:13px;z-index:2000;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+
+.footer-note{font-size:11px;color:#475569;text-align:center;margin-top:14px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ========== 题目数据 ==========
+const QUESTIONS = [
+  { id:'c1', type:'choice', dim:0, text:'面对一个完全没有答案的难题，你会怎么做？', opts:['立刻查找资料，从头学起','先自己思考推导','这个问题可能无解，搁置','先问问AI能否帮忙'], tags:['explorer','thinker','sceptic','collaborator'] },
+  { id:'c2', type:'choice', dim:1, text:'向别人解释一个复杂概念时，你通常会？', opts:['找形象的类比让它简单','按逻辑顺序一步步拆解','放弃，觉得太费劲','用画图或写出来'], tags:['analogy','logical','giveup','visual'] },
+  { id:'c3', type:'choice', dim:2, text:'使用AI工具时，你更倾向于？', opts:['给明确指令让AI执行','和AI反复讨论完善','自己先做，AI辅助参考','把AI当伙伴一起思考'], tags:['directive','iterative','independent','partner'] },
+  { id:'c4', type:'choice', dim:3, text:'看到一个问题时，你脑海里第一个念头是？', opts:['有没有现成解决方案？','能不能用有趣的方式解决？','背后的原因是什么？','换个角度会怎样？'], tags:['practical','playful','causal','lateral'] },
+  { id:'c5', type:'choice', dim:0, text:'学习全新技术时，你的感觉是？', opts:['兴奋，想马上动手试试','有点慌，需要时间消化','无所谓，能用就行','好奇，想搞清原理'], tags:['explorer','cautious','pragmatic','curious'] },
+  { id:'c6', type:'choice', dim:1, text:'写了一篇文章后，你通常会？', opts:['反复修改到满意为止','大概看看就发布','让别人帮忙看看','自己读一遍检查逻辑'], tags:['perfectionist','casual','social','critical'] },
+  { id:'c7', type:'choice', dim:2, text:'遇到AI给出的错误答案，你会？', opts:['立刻指出并纠正它','把错误当作学习机会','忽略它，换个问题问','让它重新思考一下'], tags:['confrontational','learning','avoidant','guiding'] },
+  { id:'c8', type:'choice', dim:3, text:'一个常规流程可以被颠覆，你会？', opts:['立刻提出新方案','评估后再提建议','觉得现有方式也可以','先观望，不确定是否可行'], tags:['innovative','measured','statusquo','cautious'] },
+  { id:'t1', type:'tf',   dim:0, text:'我认为解决问题的过程和答案一样重要', tags:['process'] },
+  { id:'t2', type:'tf',   dim:1, text:'如果无法简洁地解释一个想法，说明理解还不够深', tags:['clarity'] },
+  { id:'t3', type:'tf',   dim:2, text:'AI是我的得力工具，但判断权永远在自己手里', tags:['balance'] },
+  { id:'t4', type:'tf',   dim:3, text:'我经常对常识性的东西感到好奇，想搞清楚为什么', tags:['curiosity'] },
+  { id:'t5', type:'tf',   dim:0, text:'我愿意接受不确定性，直到有足够证据才下结论', tags:['sceptic'] },
+  { id:'t6', type:'tf',   dim:3, text:'我经常从完全不相关的领域寻找灵感', tags:['creative'] },
+  { id:'s1', type:'sort', dim:1, text:'请按对你最重要的程度排序：', items:['找到最优解','保持开放心态','兼顾效率与质量','让大家都能理解'], tags:['optimal','open','balanced','accessible'] }
+];
+
+const DIM_NAMES  = ['🔮 逻辑推理','💬 语言表达','🤖 AI协作','✨ 创意想象'];
+const DIM_COLORS = ['#6366f1','#10b981','#f59e0b','#ec4899'];
+const DIM_SHORT   = ['逻辑','表达','协作','创意'];
+
+const TYPES = {
+  '逻辑大师':  { icon:'🧠', desc:'思维清晰，理性至上，每一步都有理有据' },
+  '创意鬼才':  { icon:'💡', desc:'点子多、想法天马行空，总能想到别人想不到的' },
+  'AI指挥官':  { icon:'⚡', desc:'善于驾驭AI工具，让技术为想法服务' },
+  '融合思辨者':{ icon:'🔮', desc:'不拘一格，融汇理性与感性，思维极具弹性' },
+  '表达大师':  { icon:'🎯', desc:'能把复杂问题讲得清晰易懂，影响力强' },
+  '潜力股型':  { icon:'🌱', desc:'思维活跃，潜力巨大，正在快速成长中' }
+};
+
+// ========== 状态（唯一数据源）==========
+let S = {
+  screen: 'privacy',   // privacy | welcome | test | result
+  qids: [],            // 本次测试的题目ID顺序
+  cur: 0,              // 当前题目索引
+  ans: {},             // { qid: answer }
+  finished: false,     // 是否已提交
+  shared: false,      // 是否已分享解锁
+  result: null,        // 计算结果
+  submitting: false     // 防重复提交标志
+};
+
+// ========== 工具函数 ==========
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function hashFingerprint() {
+  const keys = [navigator.userAgent, navigator.language,
+    screen.width+'x'+screen.height, screen.colorDepth, new Date().getTimezoneOffset()];
+  let h = 0x811c9dc5;
+  for (const s of keys) {
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = (h * 0x01000193) >>> 0;
+    }
+  }
+  return h;
+}
+
+function getBucket() { return hashFingerprint() % 10 < 3 ? 'high' : 'low'; }
+
+function save() { localStorage.setItem('aim2', JSON.stringify(S)); }
+
+function load() {
+  try {
+    const d = localStorage.getItem('aim2');
+    if (d) S = JSON.parse(d);
+  } catch(e) {}
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function getQ(id) { return QUESTIONS.find(q => q.id === id); }
+
+function answeredCount() { return Object.keys(S.ans).length; }
+
+function isAnswered(id) { return S.ans[id] !== undefined; }
+
+function isLastQ() { return S.cur === S.qids.length - 1; }
+
+// ========== 题目生成 ==========
+function genQids() {
+  const choices = shuffle(QUESTIONS.filter(q => q.type === 'choice')).slice(0, 8);
+  const tfs    = shuffle(QUESTIONS.filter(q => q.type === 'tf')).slice(0, 6);
+  const sorts  = shuffle(QUESTIONS.filter(q => q.type === 'sort')).slice(0, 1);
+  return shuffle([...choices, ...tfs, ...sorts]).map(q => q.id);
+}
+
+// ========== 计算结果 ==========
+function calcResult() {
+  const cnt = [{},{},{},{}];
+  for (const id of S.qids) {
+    const q = getQ(id);
+    const a = S.ans[id];
+    if (a === undefined) continue;
+    const tag = q.type === 'choice'  ? q.tags[a]
+              : q.type === 'tf'      ? q.tags[0]
+              :                         q.tags[a[0]];
+    if (!cnt[q.dim][tag]) cnt[q.dim][tag] = 0;
+    cnt[q.dim][tag]++;
+  }
+
+  const pcts = [75,75,75,75];
+  for (let d = 0; d < 4; d++) {
+    const vals = Object.values(cnt[d]);
+    if (vals.length === 0) continue;
+    const total = vals.reduce((s,v) => s+v, 0);
+    const max = Math.max(...vals);
+    pcts[d] = Math.round(60 + (max / total) * 35);
+  }
+
+  const base = Math.round(pcts[0]*.35 + pcts[1]*.25 + pcts[2]*.2 + pcts[3]*.2);
+  const extra = getBucket() === 'high' ? Math.floor(Math.random() * 8) : Math.floor(Math.random() * 10);
+  const total = Math.min(95, base + extra);
+
+  let mainType = '潜力股型';
+  const sorted = [...pcts].sort((a,b) => b-a);
+  if (sorted[0] - sorted[3] >= 15) {
+    const dimMap = ['','','',''];
+    mainType = ['逻辑大师','表达大师','AI指挥官','创意鬼才'][pcts.indexOf(sorted[0])] || '融合思辨者';
+  } else {
+    const avg = pcts.reduce((s,v) => s+v, 0) / 4;
+    const dev = Math.sqrt(pcts.reduce((s,v) => s+(v-avg)**2, 0) / 4);
+    mainType = dev < 8 ? '融合思辨者' : (pcts.indexOf(Math.min(...pcts)) === 1 ? '表达大师' : '融合思辨者');
+  }
+
+  return { total, pcts, type: mainType };
+}
+
+// ========== 核心动作 ==========
+function startTest() {
+  S = { screen:'test', qids:genQids(), cur:0, ans:{}, finished:false, shared:false, result:null, submitting:false };
+  save();
+  render();
+}
+
+function handleOption(idx) {
+  const q = getQ(S.qids[S.cur]);
+  if (q.type === 'sort') return;
+  S.ans[q.id] = idx;
+  save();
+  render();
+
+  if (isLastQ()) {
+    setTimeout(submitTest, 220);
+  } else {
+    setTimeout(() => { S.cur++; save(); render(); }, 200);
+  }
+}
+
+function handleTF(idx) {
+  const q = getQ(S.qids[S.cur]);
+  S.ans[q.id] = idx;
+  save();
+  render();
+
+  if (isLastQ()) {
+    setTimeout(submitTest, 220);
+  } else {
+    setTimeout(() => { S.cur++; save(); render(); }, 200);
+  }
+}
+
+function handleSortMove(pos, dir) {
+  const q = getQ(S.qids[S.cur]);
+  const order = S.ans[q.id] ? [...S.ans[q.id]] : [0,1,2,3];
+  const np = pos + dir;
+  if (np < 0 || np >= order.length) return;
+  [order[pos], order[np]] = [order[np], order[pos]];
+  S.ans[q.id] = order;
+  save();
+  render();
+}
+
+function handleSortConfirm() {
+  const q = getQ(S.qids[S.cur]);
+  if (!S.ans[q.id]) { toast('请先调整排序'); return; }
+  save();
+  if (isLastQ()) {
+    setTimeout(submitTest, 220);
+  } else {
+    setTimeout(() => { S.cur++; save(); render(); }, 200);
+  }
+}
+
+function submitTest() {
+  if (S.finished || S.submitting) return;
+  S.submitting = true;
+  S.finished = true;
+  S.result = calcResult();
+  S.screen = 'result';
+  S.submitting = false;
+  save();
+  render();
+}
+
+function handleShare() {
+  if (!S.shared) {
+    S.shared = true;
+    save();
+  }
+  generateShareImage();
+  render();
+}
+
+function handleRestart() { startTest(); }
+function handleHome() {
+  S = { screen:'welcome', qids:[], cur:0, ans:{}, finished:false, shared:false, result:null, submitting:false };
+  save();
+  render();
+}
+
+// ========== 分享图 ==========
+function generateShareImage() {
+  const r = S.result;
+  const t = TYPES[r.type];
+  const c = document.createElement('canvas');
+  c.width = 400; c.height = 520;
+  const ctx = c.getContext('2d');
+
+  ctx.fillStyle = '#080810';
+  ctx.fillRect(0, 0, 400, 520);
+
+  const grd = ctx.createRadialGradient(200, 0, 0, 200, 0, 380);
+  grd.addColorStop(0, 'rgba(99,102,241,0.18)');
+  grd.addColorStop(1, 'transparent');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, 400, 260);
+
+  ctx.fillStyle = '#818cf8';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('AI思维测试', 200, 48);
+
+  ctx.fillStyle = '#f1f5f9';
+  ctx.font = 'bold 54px sans-serif';
+  ctx.fillText(r.total + '分', 200, 122);
+
+  ctx.fillStyle = 'rgba(99,102,241,0.12)';
+  ctx.beginPath(); ctx.roundRect(115, 142, 170, 38, 19); ctx.fill();
+  ctx.strokeStyle = 'rgba(99,102,241,0.3)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  ctx.fillStyle = '#f1f5f9';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.fillText(t.icon + ' ' + r.type, 200, 168);
+
+  const names = ['逻辑推理','语言表达','AI协作','创意想象'];
+  r.pcts.forEach((p, i) => {
+    const y = 215 + i * 52;
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(names[i], 48, y);
+    ctx.fillStyle = 'rgba(255,255,255,0.07)';
+    ctx.beginPath(); ctx.roundRect(48, y+7, 200, 6, 3); ctx.fill();
+    ctx.fillStyle = DIM_COLORS[i];
+    ctx.beginPath(); ctx.roundRect(48, y+7, 200*p/100, 6, 3); ctx.fill();
+    ctx.fillStyle = DIM_COLORS[i];
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(p+'%', 298, y+3);
+  });
+
+  ctx.fillStyle = '#475569';
+  ctx.font = 'italic 11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('"' + t.desc + '"', 200, 488);
+
+  const link = document.createElement('a');
+  link.download = `AI思维测试_${r.total}分_${r.type}.png`;
+  link.href = c.toDataURL();
+  link.click();
+  toast('分享图已保存！');
+}
+
+// ========== 渲染 ==========
+function render() {
+  const app = document.getElementById('app');
+  if (S.screen === 'privacy') { renderPrivacy(app); return; }
+  if (S.screen === 'welcome') { renderWelcome(app); return; }
+  if (S.screen === 'test')    { renderTest(app);    return; }
+  if (S.screen === 'result') { renderResult(app);  return; }
+}
+
+function renderPrivacy(el) {
+  el.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-title">🔒 隐私说明</div>
+        <div class="modal-body">
+          <p>欢迎参与 AI 思维测试！</p>
+          <p>本测试完全匿名，无需注册。我们通过设备指纹生成随机得分（控分机制），用于产品推广。</p>
+          <p>测试数据仅存储在您的本地设备，不会上传至任何服务器。</p>
+        </div>
+        <button class="accept-btn" id="acceptBtn">开始测试 →</button>
+      </div>
+    </div>`;
+  document.getElementById('acceptBtn').addEventListener('click', () => {
+    S.screen = 'welcome';
+    save();
+    render();
+  });
+}
+
+function renderWelcome(el) {
+  el.innerHTML = `
+    <div class="welcome">
+      <div class="welcome-icon">🧠</div>
+      <div class="welcome-title">AI 思维测试</div>
+      <div class="welcome-desc">
+        8道选择题 · 6道判断题 · 1道排序题<br>
+        约3分钟 · 立即出结果
+      </div>
+      <button class="start-btn" id="startBtn">开始测试</button>
+    </div>
+    <p class="footer-note">测试结果仅供娱乐参考，每种思维方式都有独特价值</p>`;
+  document.getElementById('startBtn').addEventListener('click', startTest);
+}
+
+function renderTest(el) {
+  const qid = S.qids[S.cur];
+  const q   = getQ(qid);
+  const total = S.qids.length;
+  const done  = answeredCount();
+  const isLast = S.cur === total - 1;
+
+  let bodyHTML = '';
+  if (q.type === 'choice') {
+    bodyHTML = q.opts.map((opt, i) => `
+      <div class="option ${S.ans[qid] === i ? 'selected' : ''}" data-opt="${i}">
+        <div class="opt-letter">${String.fromCharCode(65+i)}</div>
+        <div class="opt-text">${opt}</div>
+      </div>`).join('');
+  } else if (q.type === 'tf') {
+    bodyHTML = `
+      <div class="tf-options">
+        <div class="tf-btn ${S.ans[qid] === 0 ? 'selected' : ''}" data-tf="0">
+          <span class="tf-icon">✅</span><div class="tf-label">同意</div><div class="tf-desc">符合我的想法</div>
+        </div>
+        <div class="tf-btn ${S.ans[qid] === 1 ? 'selected' : ''}" data-tf="1">
+          <span class="tf-icon">❌</span><div class="tf-label">不同意</div><div class="tf-desc">不太符合</div>
+        </div>
+      </div>`;
+  } else if (q.type === 'sort') {
+    const order = S.ans[qid] || [0,1,2,3];
+    bodyHTML = `
+      <div class="sort-list">
+        ${order.map((itemIdx, pos) => `
+          <div class="sort-item">
+            <div class="sort-rank">${pos+1}</div>
+            <div class="sort-text">${q.items[itemIdx]}</div>
+            <div class="sort-btns">
+              <button class="sort-btn" data-move="${pos},-1" ${pos===0?'disabled':''}>↑</button>
+              <button class="sort-btn" data-move="${pos},1" ${pos===order.length-1?'disabled':''}>↓</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <p class="sort-hint">📌 点击 ↑↓ 调整顺序，按对你最重要的排列</p>
+      <button class="btn-primary" id="confirmSortBtn">确认排序 →</button>`;
+  }
+
+  el.innerHTML = `
+    <div style="width:100%;max-width:460px">
+      <div class="top-bar">
+        <div class="logo">🧠 AI思维测试</div>
+        <div class="step-badge">${S.cur+1} / ${total}</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-thumb" style="width:${(done/total)*100}%"></div></div>
+        <div class="progress-dots">
+          ${S.qids.map((id, i) => `<div class="p-dot ${i===S.cur?'active':''} ${isAnswered(id)?'done':''}"></div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="q-meta">
+          <span class="q-tag">${q.type==='choice'?'选择题':q.type==='tf'?'判断题':'排序题'}</span>
+          <span class="q-dim">${DIM_NAMES[q.dim]}</span>
+        </div>
+        <div class="question-text">${q.text}</div>
+        ${bodyHTML}
+      </div>
+    </div>`;
+
+  // 绑定事件
+  if (q.type === 'choice') {
+    el.querySelectorAll('.option').forEach(optEl => {
+      optEl.addEventListener('click', () => handleOption(parseInt(optEl.dataset.opt)));
+    });
+  } else if (q.type === 'tf') {
+    el.querySelectorAll('.tf-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleTF(parseInt(btn.dataset.tf)));
+    });
+  } else if (q.type === 'sort') {
+    el.querySelectorAll('.sort-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const [p, d] = btn.dataset.move.split(',').map(Number);
+        handleSortMove(p, d);
+      });
+    });
+    document.getElementById('confirmSortBtn').addEventListener('click', handleSortConfirm);
+  }
+}
+
+function renderResult(el) {
+  const r = S.result;
+  const t = TYPES[r.type];
+  const shared = S.shared;
+
+  let mainHTML = '';
+  if (!shared) {
+    mainHTML = `
+      <div class="unlock-card">
+        <div class="unlock-icon">🔓</div>
+        <div class="unlock-title">测试完成！你是"${r.type}"</div>
+        <div class="unlock-desc">想知道完整报告？<br>分享给朋友即可免费解锁</div>
+        <div class="score-display">${r.total}分</div>
+        <div class="unlock-note">${t.icon} ${t.desc}</div>
+        <button class="share-btn" id="shareBtn">🔗 点击分享 → 免费解锁完整结果</button>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn-secondary" id="restartBtn">🔄 重新测试</button>
+          <button class="btn-secondary" id="homeBtn">🏠 返回首页</button>
+        </div>
+      </div>`;
+  } else {
+    mainHTML = `
+      <div class="ability-card">
+        <h3>📊 能力雷达</h3>
+        ${r.pcts.map((p, i) => `
+          <div class="ability-row">
+            <span class="ability-name">${DIM_SHORT[i]}</span>
+            <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:${p}%;background:${DIM_COLORS[i]}"></div></div>
+            <span class="ability-pct" style="color:${DIM_COLORS[i]}">${p}%</span>
+          </div>`).join('')}
+      </div>
+      <div class="detail-card">
+        <h3>🏷️ 核心特征</h3>
+        <div class="feature-tags">
+          <span class="tag">${r.type}</span>
+          <span class="tag">得分${r.total}</span>
+          <span class="tag">${DIM_SHORT[r.pcts.indexOf(Math.max(...r.pcts))]}</span>
+        </div>
+        <p class="type-desc">${t.desc}</p>
+      </div>
+      <button class="btn-primary" id="saveImgBtn" style="margin-bottom:10px">🖼️ 保存分享图</button>
+      <div class="btn-row">
+        <button class="btn-secondary" id="restartBtn2">🔄 重新测试</button>
+        <button class="btn-secondary" id="homeBtn2">🏠 返回首页</button>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div style="width:100%;max-width:460px">
+      <div class="top-bar">
+        <div class="logo">🧠 AI思维测试</div>
+        <div class="step-badge">测试完成</div>
+      </div>
+      <div class="card result-hero">
+        <div class="result-score">${r.total}</div>
+        <div class="result-label">你的思维天赋得分</div>
+        <div class="type-badge">${t.icon} ${r.type}</div>
+      </div>
+      ${mainHTML}
+      <p class="footer-note">测试结果仅供娱乐参考，每种思维方式都有其独特价值</p>
+    </div>`;
+
+  // 绑定按钮
+  if (!shared) {
+    document.getElementById('shareBtn').addEventListener('click', handleShare);
+  } else {
+    document.getElementById('saveImgBtn').addEventListener('click', generateShareImage);
+  }
+  document.getElementById('restartBtn').addEventListener('click', handleRestart);
+  document.getElementById('homeBtn').addEventListener('click', handleHome);
+  const r2 = document.getElementById('restartBtn2');
+  if (r2) r2.addEventListener('click', handleRestart);
+  const h2 = document.getElementById('homeBtn2');
+  if (h2) h2.addEventListener('click', handleHome);
+}
+
+// ========== 启动 ==========
+load();
+if (!S.screen || S.screen === 'privacy') S.screen = 'privacy';
+render();
+</script>
+</body>
+</html>
