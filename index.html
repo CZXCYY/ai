@@ -835,8 +835,8 @@
           </div>
           <div class="nav-row">
             ${isLastQ ? 
-              `<button class="nav-btn nav-next" style="flex:1" onclick="submitTest()">查看结果 →</button>` :
-              `<button class="nav-btn nav-next" style="flex:1" onclick="nextQ()">下一题 →</button>`
+              `<button class="nav-btn nav-next" id="btnSubmit" style="flex:1">查看结果 →</button>` :
+              `<button class="nav-btn nav-next" id="btnNext" style="flex:1">下一题 →</button>`
             }
           </div>
         </div>`;
@@ -844,6 +844,14 @@
       if (isSortQ) {
         setTimeout(bindSortEvents, 100);
       }
+      
+      // 统一用 addEventListener 绑定，防止 onclick 字符串解析失效
+      setTimeout(() => {
+        const btnSubmit = document.getElementById('btnSubmit');
+        const btnNext = document.getElementById('btnNext');
+        if (btnSubmit) btnSubmit.addEventListener('click', submitTest);
+        if (btnNext) btnNext.addEventListener('click', nextQ);
+      }, 0);
     }
     
     function bindSortEvents() {
