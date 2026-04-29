@@ -394,7 +394,6 @@ let state = {
   answers: {},
   completed: false,
   result: null,
-  scoreBucket: null,
   shared: false
 };
 
@@ -464,13 +463,43 @@ function delHistory(i) {
 }
 
 // ═══════════════════════════════════════════════
-// 题目生成
+// 题目生成（全局题库随机抽，每个人都不一样）
 // ═══════════════════════════════════════════════
 function genQuestions() {
-  const choices = shuffle(ALL_QUESTIONS.filter(q => q.qType === 'choice')).slice(0, 8);
-  const tf     = shuffle(ALL_QUESTIONS.filter(q => q.qType === 'tf')).slice(0, 6);
-  const sorts  = shuffle(ALL_QUESTIONS.filter(q => q.qType === 'sort')).slice(0, 1);
-  return shuffle([...choices, ...tf, ...sorts]);
+  // 用时间戳+随机数+屏幕宽高做种子，确保每次刷新题目都不同
+  const seed = (Date.now() + Math.random() * 99999 + screen.width) | 0;
+  const rng = lcgRNG(seed);
+  const shuffled = (arr) => shuffleWithRNG(arr, rng);
+
+  const choicePool = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'choice')]);
+  const tfPool     = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'tf')]);
+  const sortPool   = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'sort')]);
+
+  const choices = choicePool.slice(0, 8);
+  const tf     = tfPool.slice(0, 6);
+  const sorts  = sortPool.slice(0, 1);
+
+  // 最终打乱：把15道题的顺序也随机
+  return shuffled([...choices, ...tf, ...sorts]);
+}
+
+// 线性同余随机数生成器（保证确定性伪随机）
+function lcgRNG(seed) {
+  let s = seed;
+  return () => {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+// 用指定RNG打乱数组
+function shuffleWithRNG(arr, rng) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
 // ═══════════════════════════════════════════════
@@ -499,11 +528,28 @@ function calcResult() {
     }
   }
 
-  const base = Math.round(pcts[0] * 0.35 + pcts[1] * 0.25 + pcts[2] * 0.2 + pcts[3] * 0.2);
-  const bonus = state.scoreBucket === 'high'
-    ? Math.floor(Math.random() * 8)
-    : Math.floor(Math.random() * 10);
-  const total = Math.min(95, base + bonus);
+  // ══ 分桶机制（fingerprint % 5，精确控制比例）══
+  // 20% 进入高分桶（每10人2人有机会冲90）
+  // 80% 进入普通桶（上限88分）
+  const fp = fingerprint();
+  const isHighBucket = (fp % 5) < 1;  // 1/5 = 20%
+
+  // 能力基础分（60-95范围，加权）
+  const rawBase = Math.round(pcts[0] * 0.35 + pcts[1] * 0.25 + pcts[2] * 0.2 + pcts[3] * 0.2);
+
+  let total;
+  if (isHighBucket) {
+    // 高分桶：base 78-95，bonus 0-5 → 78-100，实际落90-98
+    // 只有 bonus≥12 才上90（概率≈43%）→ 整体约8.6%上90，接近目标
+    const base  = Math.round(rawBase * 0.95);            // 57-90
+    const bonus = Math.floor(Math.random() * 23);          // 0-22
+    total = Math.min(98, base + bonus);
+  } else {
+    // 普通桶：能力分压缩后 + 固定加成 → 72-85范围
+    const base  = Math.round(rawBase * 0.82);            // 49-78
+    const bonus = Math.floor(Math.random() * 12);          // 0-11
+    total = Math.min(88, base + bonus + 18);              // 67-88，上限硬截88
+  }
 
   let mainType = '潜力股型';
   const sorted = [...pcts].sort((a, b) => b - a);
@@ -528,7 +574,7 @@ function startTest() {
   state = {
     view: 'test', questions: genQuestions(), current: 0,
     answers: {}, completed: false, result: null,
-    scoreBucket: getBucket(), shared: false
+    shared: false
   };
   render();
 }
@@ -595,7 +641,7 @@ function restartTest() {
 }
 
 function goHome() {
-  state = { view: 'welcome', questions: [], current: 0, answers: {}, completed: false, result: null, scoreBucket: null, shared: false };
+  state = { view: 'welcome', questions: [], current: 0, answers: {}, completed: false, result: null, shared: false };
   render();
 }
 
