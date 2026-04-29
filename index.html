@@ -3,176 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧠 AI思维测试</title>
+<title>🧠 AI思维测试 | 发现你的大脑源代码</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0f1a 0%,#1a1a2e 100%);color:#f1f5f9;min-height:100vh;overflow-x:hidden}
-#app{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+body{font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:#030308;color:#f1f5f9;min-height:100vh;overflow-x:hidden}
 
-/* ── 隐私弹窗 ── */
-#privacyModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+/* ── 背景粒子 ── */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+
+/* ═══════════════════════════════
+   欢迎页
+═══════════════════════════════ */
+.welcome-page{text-align:center;max-width:480px;animation:fadeUp .8s ease both}
+
+/* 动态粒子标签 */
+.mind-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);border-radius:50px;font-size:12px;color:#a5b4fc;margin-bottom:24px;animation:pulse-border 2s ease-in-out infinite}
+.mind-badge .dot{width:6px;height:6px;border-radius:50%;background:#6366f1;animation:blink 1.5s ease-in-out infinite}
+
+.welcome-title{font-size:clamp(36px,8vw,56px);font-weight:900;line-height:1.15;margin-bottom:8px;letter-spacing:-1px}
+.title-line1{background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
+.title-line2{background:linear-gradient(135deg,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
+
+.welcome-sub{font-size:16px;color:#64748b;line-height:1.7;margin:20px 0 32px}
+
+.stat-row{display:flex;justify-content:center;gap:32px;margin-bottom:36px}
+.stat-item{text-align:center}
+.stat-num{font-size:28px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:11px;color:#475569;margin-top:2px}
+
+.start-btn{position:relative;padding:18px 56px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:16px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 0 40px rgba(99,102,241,0.4);transition:all .3s;overflow:hidden}
+.start-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left .5s}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(99,102,241,0.6)}
+.start-btn:hover::before{left:100%}
+.start-btn:active{transform:translateY(0)}
+
+.welcome-hint{font-size:12px;color:#475569;margin-top:16px}
+
+/* 特色展示 */
+.features{display:flex;gap:12px;margin-top:32px;justify-content:center;flex-wrap:wrap}
+.feat-chip{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:50px;font-size:12px;color:#64748b}
+.feat-chip .icon{font-size:14px}
+
+/* 底部装饰 */
+.welcome-footer{margin-top:40px;font-size:11px;color:#334155}
+
+/* ═══════════════════════════════
+   隐私弹窗
+═══════════════════════════════ */
+#privacyModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(3,3,8,0.9);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;animation:fadeIn .3s ease}
 #privacyModal.hidden{display:none}
-.privacy-card{background:rgba(30,41,59,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px 24px;max-width:380px;width:100%;text-align:center}
-.privacy-title{font-size:20px;font-weight:700;margin-bottom:16px}
-.privacy-desc{font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:24px;text-align:left}
-.privacy-desc p{margin-bottom:10px}
-.accept-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer}
+.privacy-card{background:rgba(15,15,30,0.95);border:1px solid rgba(99,102,241,0.25);border-radius:24px;padding:36px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 0 60px rgba(99,102,241,0.15)}
+.privacy-icon{font-size:48px;margin-bottom:16px}
+.privacy-title{font-size:20px;font-weight:700;margin-bottom:12px}
+.privacy-desc{font-size:14px;color:#94a3b8;line-height:1.8;margin-bottom:24px;text-align:left}
+.privacy-desc p{margin-bottom:8px}
+.accept-btn{width:100%;padding:15px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:13px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 0 30px rgba(99,102,241,0.3)}
 
-/* ── 通用布局 ── */
+/* ═══════════════════════════════
+   通用布局
+═══════════════════════════════ */
 .top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:520px;margin-bottom:16px}
-.logo{font-size:16px;font-weight:700}
-.step-badge{background:rgba(99,102,241,0.15);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:600}
+.logo{font-size:15px;font-weight:700;color:#a5b4fc}
+.step-badge{background:rgba(99,102,241,0.15);color:#a5b4fc;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(99,102,241,0.2)}
 
 /* ── 进度条 ── */
 .progress-wrap{width:100%;max-width:520px;margin-bottom:20px}
-.progress-track{height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin-bottom:10px}
-.progress-thumb{height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:4px;transition:width .3s}
-.progress-dots{display:flex;gap:5px;flex-wrap:wrap}
-.p-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.12);transition:all .2s}
-.p-dot.done{background:#6366f1}
-.p-dot.active{background:#a78bfa;transform:scale(1.3)}
+.progress-track{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;margin-bottom:12px;overflow:hidden}
+.progress-thumb{height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.progress-dots{display:flex;gap:6px;flex-wrap:wrap}
+.p-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);transition:all .2s}
+.p-dot.done{background:rgba(99,102,241,0.5)}
+.p-dot.active{background:#a78bfa;transform:scale(1.4);box-shadow:0 0 8px rgba(167,139,250,0.6)}
 
 /* ── 题目卡片 ── */
-.card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:24px;width:100%;max-width:520px;margin-bottom:16px}
-.q-type-tag{display:inline-block;background:rgba(99,102,241,0.15);color:#a5b4fc;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:10px}
-.q-dim{color:#64748b;font-size:12px;margin-left:8px}
-.question-text{font-size:16px;font-weight:600;line-height:1.6;margin-bottom:20px}
+.card{background:rgba(15,15,35,0.7);border:1px solid rgba(99,102,241,0.12);border-radius:20px;padding:28px;width:100%;max-width:520px;margin-bottom:16px;backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.q-type-tag{display:inline-block;background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(167,139,250,0.15));color:#a5b4fc;font-size:11px;padding:4px 12px;border-radius:20px;margin-bottom:12px;border:1px solid rgba(99,102,241,0.2)}
+.q-dim{color:#4b5563;font-size:12px;margin-left:8px}
+.question-text{font-size:17px;font-weight:600;line-height:1.65;margin-bottom:22px;color:#e2e8f0}
 
-/* ── 选择题选项 ── */
-.option{display:flex;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:13px;margin-bottom:10px;cursor:pointer;transition:all .2s;touch-action:manipulation}
-.option:hover{border-color:rgba(99,102,241,0.5);background:rgba(99,102,241,0.08)}
-.option.selected{border-color:#6366f1;background:rgba(99,102,241,0.15)}
-.opt-radio{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);margin-right:12px;flex-shrink:0;transition:all .2s}
-.option.selected .opt-radio{border-color:#6366f1;background:#6366f1}
-.opt-label{font-size:13px;font-weight:700;color:#a5b4fc;margin-right:10px;flex-shrink:0}
-.opt-text{font-size:14px;color:#e2e8f0}
+/* ── 选择题 ── */
+.option{display:flex;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);border-radius:13px;margin-bottom:10px;cursor:pointer;transition:all .2s;touch-action:manipulation}
+.option:hover{border-color:rgba(99,102,241,0.5);background:rgba(99,102,241,0.08);transform:translateX(4px)}
+.option.selected{border-color:#6366f1;background:rgba(99,102,241,0.15);box-shadow:0 0 20px rgba(99,102,241,0.15)}
+.opt-radio{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin-right:12px;flex-shrink:0;transition:all .2s}
+.option.selected .opt-radio{border-color:#6366f1;background:#6366f1;box-shadow:0 0 10px rgba(99,102,241,0.5)}
+.opt-label{font-size:12px;font-weight:700;color:#6366f1;margin-right:10px;flex-shrink:0;opacity:.7}
+.option.selected .opt-label{opacity:1}
+.opt-text{font-size:14px;color:#cbd5e1}
 
 /* ── 判断题 ── */
 .tf-options{display:flex;gap:12px}
-.tf-btn{flex:1;padding:16px 12px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:13px;cursor:pointer;text-align:center;transition:all .2s;touch-action:manipulation}
-.tf-btn:hover{border-color:rgba(99,102,241,0.5)}
-.tf-btn.selected{border-color:#6366f1;background:rgba(99,102,241,0.15)}
-.tf-icon{font-size:28px;margin-bottom:6px;display:block}
-.tf-label{font-size:14px;font-weight:600}
+.tf-btn{flex:1;padding:18px 12px;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.07);border-radius:14px;cursor:pointer;text-align:center;transition:all .25s;touch-action:manipulation}
+.tf-btn:hover{border-color:rgba(99,102,241,0.5);transform:translateY(-2px)}
+.tf-btn.selected{border-color:#6366f1;background:rgba(99,102,241,0.12);box-shadow:0 0 24px rgba(99,102,241,0.12)}
+.tf-icon{font-size:32px;margin-bottom:8px;display:block}
+.tf-label{font-size:15px;font-weight:700}
 .tf-desc{font-size:11px;color:#64748b;margin-top:4px}
 
 /* ── 排序题 ── */
-.sort-hint{font-size:12px;color:#64748b;margin:12px 0 8px}
-.sort-item{display:flex;align-items:center;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:8px;gap:10px}
-.sort-num{color:#6366f1;font-weight:700;width:20px;flex-shrink:0}
-.sort-text{flex:1;font-size:14px}
-.sort-btn{background:rgba(255,255,255,0.06);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;color:#94a3b8;font-size:13px;touch-action:manipulation}
-.sort-btn:disabled{opacity:0.3;cursor:not-allowed}
-.sort-confirm-btn{width:100%;max-width:520px;padding:15px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,0.25)}
+.sort-hint{font-size:12px;color:#475569;margin:12px 0 8px}
+.sort-item{display:flex;align-items:center;padding:13px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:11px;margin-bottom:8px;gap:10px;transition:all .2s}
+.sort-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sort-text{flex:1;font-size:14px;color:#cbd5e1}
+.sort-btn{background:rgba(255,255,255,0.06);border:none;border-radius:8px;padding:7px 11px;cursor:pointer;color:#94a3b8;font-size:13px;touch-action:manipulation;transition:all .15s}
+.sort-btn:hover{background:rgba(99,102,241,0.2);color:#a5b4fc}
+.sort-btn:disabled{opacity:0.25;cursor:not-allowed}
+.sort-confirm-btn{width:100%;padding:16px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(99,102,241,0.3);margin-top:4px}
 
 /* ── 导航按钮 ── */
 .nav-row{display:flex;gap:10px;width:100%;max-width:520px}
-.nav-btn{flex:1;padding:15px;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s}
-.nav-prev{background:rgba(255,255,255,0.06);color:#94a3b8}
-.nav-prev:hover{background:rgba(255,255,255,0.1)}
-.nav-next{background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;box-shadow:0 4px 16px rgba(99,102,241,0.25)}
-.nav-next:hover{opacity:0.92}
+.nav-btn{flex:1;padding:16px;border:none;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s}
+.nav-next{background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.nav-next:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 28px rgba(99,102,241,0.4)}
 
-/* ── 结果页 ── */
-.result-hero{text-align:center;padding:16px 0 24px}
-.result-score{font-size:72px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
-.result-label{color:#64748b;font-size:13px;margin-bottom:16px}
-.type-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:40px;font-size:15px;font-weight:700}
-.type-super{font-size:13px;color:#94a3b8;margin-top:12px;line-height:1.6}
+/* ═══════════════════════════════
+   结果页
+═══════════════════════════════ */
+.result-hero{text-align:center;padding:20px 0 28px}
+
+/* 分数动画 */
+.result-score-wrap{position:relative;display:inline-block;margin-bottom:8px}
+.result-score{font-size:clamp(64px,15vw,88px);font-weight:900;background:linear-gradient(135deg,#818cf8,#c084fc,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;animation:scoreIn .6s cubic-bezier(.34,1.56,.64,1) both}
+.result-score-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:radial-gradient(circle,rgba(99,102,241,0.3),transparent 70%);border-radius:50%;z-index:-1;animation:pulse-glow 2s ease-in-out infinite}
+
+.result-label{font-size:13px;color:#475569;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase}
+.type-badge{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:50px;font-size:18px;font-weight:700;box-shadow:0 0 30px rgba(99,102,241,0.1)}
+.type-badge .icon{font-size:22px}
+.type-super{font-size:14px;color:#94a3b8;margin-top:14px;line-height:1.7}
 
 /* ── 分享解锁 ── */
-.unlock-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.08));border:2px solid rgba(16,185,129,0.3);border-radius:20px;padding:28px 24px;margin-bottom:18px;text-align:center}
-.unlock-icon{font-size:48px;margin-bottom:12px}
-.unlock-title{font-size:18px;font-weight:700;margin-bottom:8px}
-.unlock-desc{font-size:13px;color:#94a3b8;line-height:1.7;margin-bottom:14px}
-.unlock-score{font-size:24px;font-weight:800;color:#10b981;margin:12px 0}
-.share-btn{width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(16,185,129,0.3)}
-.bottom-btns{display:flex;gap:10px;margin-top:12px}
-.bottom-btn{flex:1;padding:13px;background:rgba(255,255,255,0.06);color:#94a3b8;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
+.unlock-card{background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(5,150,105,0.05));border:2px solid rgba(16,185,129,0.3);border-radius:24px;padding:32px 24px;margin-bottom:18px;text-align:center;box-shadow:0 0 40px rgba(16,185,129,0.08)}
+.unlock-icon{font-size:56px;margin-bottom:16px;animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1)}
+.unlock-title{font-size:22px;font-weight:800;margin-bottom:8px;color:#f1f5f9}
+.unlock-desc{font-size:14px;color:#64748b;line-height:1.7;margin-bottom:16px}
+.unlock-score{font-size:40px;font-weight:900;background:linear-gradient(135deg,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0}
+.share-btn{width:100%;padding:16px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(16,185,129,0.3);margin-bottom:12px}
+.bottom-btns{display:flex;gap:10px}
+.bottom-btn{flex:1;padding:13px;background:rgba(255,255,255,0.05);color:#94a3b8;border:1px solid rgba(255,255,255,0.08);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
 .bottom-btn:hover{background:rgba(255,255,255,0.1)}
 
 /* ── 详细报告 ── */
-.section-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.section-title .icon{font-size:16px}
+.section-title{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:#a5b4fc}
+.section-title .icon{font-size:18px}
+.section-title .arrow{font-size:11px;color:#334155;margin-left:auto}
 
 /* 能力雷达 */
-.ability-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
-.ability-card h3{font-size:14px;font-weight:700;margin-bottom:14px}
-.ability-row{display:flex;align-items:center;margin-bottom:12px;gap:10px}
+.ability-card{background:rgba(15,15,35,0.7);border:1px solid rgba(99,102,241,0.12);border-radius:20px;padding:22px;width:100%;max-width:520px;margin-bottom:14px;backdrop-filter:blur(10px)}
+.ability-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .ability-icon{font-size:16px;width:24px;text-align:center}
-.ability-name{font-size:13px;color:#94a3b8;width:68px;flex-shrink:0}
-.ability-bar-bg{flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
-.ability-bar-fill{height:100%;border-radius:4px;transition:width .6s}
+.ability-name{font-size:13px;color:#94a3b8;width:64px;flex-shrink:0}
+.ability-bar-bg{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.ability-bar-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 .ability-pct{font-size:12px;font-weight:700;width:36px;text-align:right}
-.ability-desc{font-size:12px;color:#64748b;margin-top:2px}
+.ability-detail{font-size:12px;color:#64748b;line-height:1.65;margin:-6px 0 16px 34px}
+.ability-detail:last-child{margin-bottom:0}
 
 /* 优劣势 */
-.strength-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
-.strength-item{display:flex;gap:10px;margin-bottom:14px}
+.strength-card{background:rgba(15,15,35,0.7);border:1px solid rgba(99,102,241,0.12);border-radius:20px;padding:22px;width:100%;max-width:520px;margin-bottom:14px;backdrop-filter:blur(10px)}
+.strength-item{display:flex;gap:12px;margin-bottom:16px}
 .strength-item:last-child{margin-bottom:0}
 .strength-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.strength-icon.pro{background:rgba(16,185,129,0.15)}
-.strength-icon.con{background:rgba(239,68,68,0.15)}
-.strength-icon.hidden{background:rgba(245,158,11,0.15)}
+.strength-icon.pro{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.2)}
+.strength-icon.con{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2)}
+.strength-icon.hidden{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2)}
 .strength-text{flex:1}
-.strength-label{font-size:12px;font-weight:700;margin-bottom:3px}
-.strength-label.pro{color:#10b981}
-.strength-label.con{color:#ef4444}
-.strength-label.hidden{color:#f59e0b}
-.strength-detail{font-size:12px;color:#94a3b8;line-height:1.6}
-
-/* 维度详情 */
-.dim-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
-.dim-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.dim-badge{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.dim-title{font-size:14px;font-weight:700}
-.dim-score{font-size:13px;font-weight:700;margin-left:auto}
-.dim-bar-bg{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-bottom:10px;overflow:hidden}
-.dim-bar-fill{height:100%;border-radius:3px}
-.dim-detail{font-size:12px;color:#94a3b8;line-height:1.7}
-.dim-detail strong{color:#e2e8f0}
+.strength-label{font-size:11px;font-weight:700;margin-bottom:4px;letter-spacing:.5px}
+.strength-label.pro{color:#34d399}
+.strength-label.con{color:#f87171}
+.strength-label.hidden{color:#fbbf24}
+.strength-detail{font-size:13px;color:#94a3b8;line-height:1.65}
 
 /* 成长建议 */
-.growth-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
-.growth-item{display:flex;gap:10px;margin-bottom:12px}
+.growth-card{background:rgba(15,15,35,0.7);border:1px solid rgba(99,102,241,0.12);border-radius:20px;padding:22px;width:100%;max-width:520px;margin-bottom:14px;backdrop-filter:blur(10px)}
+.growth-item{display:flex;gap:12px;margin-bottom:14px}
 .growth-item:last-child{margin-bottom:0}
-.growth-num{width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.growth-text{font-size:12px;color:#94a3b8;line-height:1.7}
+.growth-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,rgba(99,102,241,0.3),rgba(167,139,250,0.2));border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.growth-text{font-size:13px;color:#94a3b8;line-height:1.7}
 .growth-text strong{color:#e2e8f0}
 
-/* ── 欢迎页 ── */
-.welcome-card{text-align:center;max-width:400px}
-.welcome-icon{font-size:72px;margin-bottom:20px}
-.welcome-title{font-size:26px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.welcome-desc{font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:28px}
-.start-btn{padding:16px 48px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(99,102,241,0.35)}
-
-/* ── 历史记录 ── */
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
-.history-empty{color:#64748b;font-size:14px;text-align:center;padding:20px 0}
+/* 历史记录 */
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.history-empty{color:#475569;font-size:14px;text-align:center;padding:24px 0}
+.history-type{font-weight:700;font-size:14px}
+.history-date{font-size:12px;color:#475569;margin-top:2px}
+.history-score{font-size:22px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.history-del{color:#475569;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:6px}
+.history-del:hover{color:#ef4444;background:rgba(239,68,68,0.1)}
 
 /* ── Toast ── */
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:white;padding:12px 24px;border-radius:10px;font-size:14px;z-index:2000;pointer-events:none;opacity:0;transition:opacity .3s}
-.toast.show{opacity:1}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(15,15,35,0.95);color:white;padding:12px 24px;border-radius:12px;font-size:14px;z-index:2000;pointer-events:none;opacity:0;transition:all .3s;border:1px solid rgba(99,102,241,0.2);box-shadow:0 4px 24px rgba(0,0,0,0.4)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.footer-note{font-size:11px;color:#475569;text-align:center;margin-top:16px;max-width:400px}
+.footer-note{font-size:11px;color:#334155;text-align:center;margin-top:20px;max-width:400px}
 
-/* ── 报告展开折叠 ── */
-.collapse-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;cursor:pointer;padding:4px 0;margin-bottom:12px}
-.collapse-btn:hover{color:#94a3b8}
-.collapse-content{display:none}
-.collapse-content.open{display:block}
+/* ═══════════════════════════════
+   动画
+═══════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scoreIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes bounceIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse-border{0%,100%{border-color:rgba(99,102,241,0.3)}50%{border-color:rgba(99,102,241,0.7)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes pulse-glow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.3);opacity:.3}}
+
+/* ═══════════════════════════════
+   媒体查询
+═══════════════════════════════ */
+@media(max-width:480px){
+  .stat-row{gap:20px}
+  .type-badge{font-size:16px;padding:10px 20px}
+  .unlock-title{font-size:19px}
+  .features{flex-direction:column;align-items:center}
+}
 </style>
 </head>
 <body>
+<canvas id="bg-canvas"></canvas>
 <div id="app"></div>
 <div id="toast" class="toast"></div>
 
 <script>
 // ═══════════════════════════════════════════════
-// 题目数据
+// 粒子背景
+// ═══════════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const NUM = 60;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createParticle() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      alpha: Math.random() * 0.5 + 0.1
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({length: NUM}, createParticle);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // 星点
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(167,139,250,${p.alpha})`;
+      ctx.fill();
+    });
+    // 连接线
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(99,102,241,${(1 - dist / 120) * 0.08})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+})();
+</script>
+
+<script>
+// ═══════════════════════════════════════════════
+// 题目数据（8种类型 × 维度 × 题库）
 // ═══════════════════════════════════════════════
 const ALL_QUESTIONS = [
+  // 选择题 16道 → 抽8道
   { id:'c1',  qType:'choice', dim:0, text:'面对一个完全没有答案的难题，你会怎么做？',       options:['立刻查找相关资料，从头学起','先自己思考，尝试推导可能的解法','这个问题可能无解，暂时搁置','先问问AI能否帮忙'], tags:['explorer','thinker','sceptic','collaborator'] },
   { id:'c2',  qType:'choice', dim:1, text:'向别人解释一个复杂概念时，你通常会？',             options:['找一个形象的类比让它变得简单','按逻辑顺序一步步拆解','干脆放弃，觉得解释清楚太费劲','用画图或写出来的方式'], tags:['analogy','logical','giveup','visual'] },
   { id:'c3',  qType:'choice', dim:2, text:'使用AI工具时，你更倾向于？',                     options:['给出明确指令，让AI直接执行','和AI反复讨论，逐步完善结果','自己先做，AI只是辅助参考','把AI当伙伴，一起头脑风暴'], tags:['directive','iterative','independent','partner'] },
@@ -182,9 +310,15 @@ const ALL_QUESTIONS = [
   { id:'c7',  qType:'choice', dim:2, text:'遇到AI给出的错误答案，你会？',                    options:['立刻指出并纠正它','把错误当作学习机会','忽略它，换个问题问','让它重新思考一下'], tags:['confrontational','learning','avoidant','guiding'] },
   { id:'c8',  qType:'choice', dim:3, text:'一个常规流程可以被颠覆，你会？',                   options:['立刻提出新方案','评估后再提出建议','觉得现有方式也可以','先观望，不确定是否可行'], tags:['innovative','measured','statusquo','cautious'] },
   { id:'c9',  qType:'choice', dim:0, text:'做决策时，你更依赖什么？',                        options:['数据和事实支撑','他人的经验和意见','自己的直觉和感觉','利弊分析表格'], tags:['rational','social','intuitive','systematic'] },
-  { id:'c10', qType:'choice', dim:1, text:'什么样的表达最有效？',                              options:['简单直接，一听就懂','有故事有情节，让人印象深刻','结构清晰，逻辑严谨','生动有趣，吸引注意力'], tags:['concise','story','logical','fun'] },
+  { id:'c10', qType:'choice', dim:1, text:'什么样的表达最有效？',                            options:['简单直接，一听就懂','有故事有情节，让人印象深刻','结构清晰，逻辑严谨','生动有趣，吸引注意力'], tags:['concise','story','logical','fun'] },
   { id:'c11', qType:'choice', dim:2, text:'你希望AI在工作中扮演什么角色？',                   options:['可靠的助手，帮我完成具体任务','智能的伙伴，和我一起思考问题','高效的工具，让我事半功倍','有趣的对话者，帮我打开新思路'], tags:['assistant','partner','tool','creative'] },
   { id:'c12', qType:'choice', dim:3, text:'你觉得创新从哪里来？',                              options:['解决一个真实存在的问题','把完全无关的东西组合在一起','对现有事物提出质疑','模仿优秀的案例然后改进'], tags:['practical','cross','question','improve'] },
+  { id:'c13', qType:'choice', dim:0, text:'面对压力和突发状况，你的第一反应是？',              options:['冷静分析，找到核心问题','调动情绪，激励自己和周围人','快速行动，先做了再说','直觉导航，跟着感觉走'], tags:['calm','emotional','action','intuitive'] },
+  { id:'c14', qType:'choice', dim:1, text:'给团队布置任务时，你更关注什么？',                 options:['目标清晰，指标量化','成员状态，大家愿不愿意干','流程设计，每个环节怎么衔接','结果交付，客户满意最重要'], tags:['goal','people','process','result'] },
+  { id:'c15', qType:'choice', dim:2, text:'当你不知道该怎么做时，你会？',                      options:['搜索资料，系统性学习','找一个榜样模仿借鉴','先等一等，让子弹飞一会','凭直觉先试，错了再改'], tags:['learn','model','wait','try'] },
+  { id:'c16', qType:'choice', dim:3, text:'你更容易被什么打动？',                              options:['严密的逻辑和事实数据','一个真实而动人的故事','视觉和感官上的冲击','一种价值观或信念共鸣'], tags:['logic','story','visual','value'] },
+
+  // 判断题 12道 → 抽6道
   { id:'t1',  qType:'tf', dim:0, text:'我认为解决问题的过程和答案一样重要',                   tags:['process'] },
   { id:'t2',  qType:'tf', dim:1, text:'如果无法简洁地解释一个想法，说明理解还不够深',         tags:['clarity'] },
   { id:'t3',  qType:'tf', dim:2, text:'AI是我的得力工具，但判断权永远在自己手里',            tags:['balance'] },
@@ -195,192 +329,136 @@ const ALL_QUESTIONS = [
   { id:'t8',  qType:'tf', dim:1, text:'我觉得用比喻讲故事，比讲道理更容易让人记住',          tags:['story'] },
   { id:'t9',  qType:'tf', dim:0, text:'我觉得"标准答案"会限制人的想象力',                   tags:['open'] },
   { id:'t10', qType:'tf', dim:2, text:'我觉得AI是一个很好的 brainstorming 伙伴',            tags:['brainstorm'] },
+  { id:'t11', qType:'tf', dim:3, text:'我喜欢把完全无关的事物联系在一起，这种联想让我兴奋',  tags:['link'] },
+  { id:'t12', qType:'tf', dim:1, text:'比起一个人默默想，我更擅长在对话中理清思路',          tags:['dialogue'] },
+
+  // 排序题 6道 → 抽1道
   { id:'s1',  qType:'sort', dim:1, text:'请按对你最重要的程度排序：',                         items:['找到最优解','保持开放心态','兼顾效率与质量','让大家都能理解'], tags:['optimal','open','balanced','accessible'] },
   { id:'s2',  qType:'sort', dim:0, text:'解决一个问题时，你习惯的顺序是：',                  items:['先理解问题的本质','列出可能的解决方案','快速尝试一个方向','根据结果调整改进'], tags:['understand','list','try','iterate'] },
   { id:'s3',  qType:'sort', dim:2, text:'使用AI工具时，你通常会按什么顺序进行：',             items:['明确告诉AI你想要什么','描述你的具体需求或问题','根据AI的回复调整优化','把AI的输出直接使用或修改'], tags:['clear','describe','adjust','use'] },
-  { id:'s4',  qType:'sort', dim:3, text:'产生一个新想法时，你的思考顺序通常是：',            items:['发现一个有趣的问题','联想其他领域的启发','形成一个独特的观点','想办法验证它是否可行'], tags:['question','link','form','verify'] }
+  { id:'s4',  qType:'sort', dim:3, text:'产生一个新想法时，你的思考顺序通常是：',            items:['发现一个有趣的问题','联想其他领域的启发','形成一个独特的观点','想办法验证它是否可行'], tags:['question','link','form','verify'] },
+  { id:'s5',  qType:'sort', dim:0, text:'面对高压环境时，你的应对顺序是：',                  items:['冷静分析局势','调动资源应对','安抚自己和他人的情绪','快速行动争取主动权'], tags:['analyze','resource','calm','action'] },
+  { id:'s6',  qType:'sort', dim:1, text:'推动一个项目落地时，你的优先级顺序是：',            items:['明确最终目标和意义','设计可行的执行路径','协调各方资源和人力','紧盯结果和关键里程碑'], tags:['goal','path','resource','result'] }
 ];
 
 const DIM_NAMES  = ['🔮 逻辑推理', '💬 语言表达', '🤖 AI协作', '✨ 创意想象'];
-const DIM_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899'];
+const DIM_COLORS = ['#818cf8', '#34d399', '#fbbf24', '#f472b6'];
 
 // ═══════════════════════════════════════════════
-// 详细类型数据（含优劣势 + 隐形能力）
+// 8种思维类型（新增2种：架构设计师+逆境求生者）
 // ═══════════════════════════════════════════════
 const TYPE_DATA = {
   '逻辑大师': {
-    icon:'🧠', super:'思维清晰，理性至上，每一步都有理有据',
+    icon:'🧠', color:'#818cf8',
+    super:'思维清晰，理性至上，每一步都有理有据',
     dimDesc:[
       '你有很强的分析和推理能力，面对复杂问题能迅速找到核心。你习惯用逻辑搭建框架，再填充细节。',
       '你注重表达的清晰与精准，讨厌模糊和废话。你说和写都追求"一句话讲清楚"。',
       '你把AI当作工具，更在意如何精准地下指令，让AI按自己的框架执行。',
       '你对创意的态度偏谨慎，更看重方案是否可行，而非想法本身有多新奇。'
     ],
-    strengths:[
-      '快速抓住问题本质，拆解复杂任务',
-      '决策有据可依，不容易被情绪带偏',
-      '擅长建立系统和流程，规模化复制'
-    ],
-    weaknesses:[
-      '过度分析导致行动迟缓（分析瘫痪）',
-      '容易忽视"感觉"和"情绪"等软因素',
-      '对没有标准答案的问题容易卡住'
-    ],
-    hiddenAbilities:[
-      '你的逻辑框架其实是很好的AI提示词模板，学会结构化表达可以让AI效率翻倍',
-      '你的"追问"能力极强——遇到不确定的事，你会本能地挖掘更深，这正是AI时代最稀缺的研究能力',
-      '你能发现别人忽略的前提假设和逻辑漏洞，这是做顾问、审计、风控的天然优势'
-    ],
-    growth:[
-      '每天给自己一个"先行动再优化"的小期限，训练快速迭代',
-      '学会欣赏没有逻辑却有效直觉，它们往往是创新的火花',
-      '把决策框架分享给团队，这是你最有价值的领导力输出'
-    ]
+    strengths:['快速抓住问题本质，拆解复杂任务','决策有据可依，不容易被情绪带偏','擅长建立系统和流程，规模化复制'],
+    weaknesses:['过度分析导致行动迟缓（分析瘫痪）','容易忽视"感觉"和"情绪"等软因素','对没有标准答案的问题容易卡住'],
+    hiddenAbilities:['你的逻辑框架其实是很好的AI提示词模板，学会结构化表达可以让AI效率翻倍','你的"追问"能力极强——遇到不确定的事，你会本能地挖掘更深，这正是AI时代最稀缺的研究能力','你能发现别人忽略的前提假设和逻辑漏洞，这是做顾问、审计、风控的天然优势'],
+    growth:['每天给自己一个"先行动再优化"的小期限，训练快速迭代','学会欣赏没有逻辑却有效的直觉，它们往往是创新的火花','把决策框架分享给团队，这是你最有价值的领导力输出']
   },
   '创意鬼才': {
-    icon:'💡', super:'点子多、想法天马行空，总能想到别人想不到的',
+    icon:'💡', color:'#f472b6',
+    super:'点子多、想法天马行空，总能想到别人想不到的',
     dimDesc:[
       '你依赖直觉和灵感解决问题，不喜欢被框架束缚。你的大脑总是在后台并行处理信息。',
       '你表达时更依赖感受和意象，有时觉得逻辑严谨的说明很无聊。',
       '你觉得AI是灵感碰撞的伙伴，不喜欢被"指令-执行"束缚。',
       '你是天生的创新者，讨厌复制别人走过的路，总想找到新的路径。'
     ],
-    strengths:[
-      '联想能力极强，能跨界组合出全新方案',
-      '对不寻常的点子有很高的容忍度，敢于尝试',
-      '在混乱中能找到隐藏的机会和可能性'
-    ],
-    weaknesses:[
-      '点子多但落地能力弱，"想得到但做不到"',
-      '想法跳跃，解释和说服别人时容易脱节',
-      '不喜欢重复性工作，容易半途而废'
-    ],
-    hiddenAbilities:[
-      '你天生的跨界联想力让AI生成的内容更具独特性——学会引导AI头脑风暴，你能成为超级创意放大器',
-      '你的"反直觉"本能是极度稀缺的战略资产，在需要挑战共识时价值连城',
-      '混乱对你来说是创作空间而非障碍——在0→1的创新阶段，你是无可替代的'
-    ],
-    growth:[
-      '找一个"执行搭档"（人或AI），让你的点子有出口',
-      '用"3句话讲清楚"训练自己把创意落地为可执行的方案',
-      '把点子记录下来再筛选，你会发现自己比想象中更有创造力'
-    ]
+    strengths:['联想能力极强，能跨界组合出全新方案','对不寻常的点子有很高的容忍度，敢于尝试','在混乱中能找到隐藏的机会和可能性'],
+    weaknesses:['点子多但落地能力弱，"想得到但做不到"','想法跳跃，解释和说服别人时容易脱节','不喜欢重复性工作，容易半途而废'],
+    hiddenAbilities:['你天生的跨界联想力让AI生成的内容更具独特性——学会引导AI头脑风暴，你能成为超级创意放大器','你的"反直觉"本能是极度稀缺的战略资产，在需要挑战共识时价值连城','在0→1的创新阶段，你是无可替代的——混乱对你来说是创作空间而非障碍'],
+    growth:['找一个"执行搭档"（人或AI），让你的点子有出口','用"3句话讲清楚"训练自己把创意落地为可执行的方案','把点子记录下来再筛选，你会发现自己比想象中更有创造力']
   },
   'AI指挥官': {
-    icon:'⚡', super:'善于驾驭AI工具，让技术为想法服务',
+    icon:'⚡', color:'#fbbf24',
+    super:'善于驾驭AI工具，让技术为想法服务',
     dimDesc:[
-      '你能在感性和理性之间灵活切换，不会被情感带偏也不会沦为纯逻辑机器。',
-      '你知道精准表达的价值，会用具体例子引导AI，理解"说清楚"和"说得好"的区别。',
+      '你在感性和理性之间灵活切换，不会被情感带偏也不会沦为纯逻辑机器。',
+      '你知道精准表达的价值，习惯用具体例子引导AI，理解"说清楚"和"说得好"的区别。',
       '你是AI的主人而非助手——你会给AI方向，但把判断权留给自己。',
       '你既能天马行空也能脚踏实地，知道什么时候该用创意，什么时候该用经验。'
     ],
-    strengths:[
-      '精准提问，能把模糊需求变成清晰指令',
-      '有极强的问题边界判断力，知道何时该追问何时该收手',
-      '在AI协作中保持主导，不被AI带偏也不盲目对抗'
-    ],
-    weaknesses:[
-      '过度优化指令，陷入"提示词工程"而忘记目标本身',
-      '对AI的依赖可能导致独立思考能力的钝化',
-      '在高压决策时可能过度征求AI意见而延迟判断'
-    ],
-    hiddenAbilities:[
-      '你能发现AI和人类各自擅长领域的边界，这是构建人机协作系统的核心能力',
-      '你天生的"批判性信任"——既用AI又不盲信AI——是AI时代最稀缺的管理思维',
-      '你能快速验证AI输出质量并迭代，这种"人机对话质量控制"能力价值极高'
-    ],
-    growth:[
-      '建立自己的AI使用边界清单：哪些事交给AI，哪些必须自己做',
-      '定期清点自己用AI解决了什么问题，评估投入产出比',
-      '把你的AI协作经验结构化输出，这是可以传授给他人的硬技能'
-    ]
+    strengths:['精准提问，能把模糊需求变成清晰指令','有极强的问题边界判断力，知道何时该追问何时该收手','在AI协作中保持主导，不被AI带偏也不盲目对抗'],
+    weaknesses:['过度优化指令，陷入"提示词工程"而忘记目标本身','对AI的依赖可能导致独立思考能力的钝化','在高压决策时可能过度征求AI意见而延迟判断'],
+    hiddenAbilities:['你能发现AI和人类各自擅长领域的边界，这是构建人机协作系统的核心能力','你天生的"批判性信任"——既用AI又不盲信AI——是AI时代最稀缺的管理思维','你能快速验证AI输出质量并迭代，这种"人机对话质量控制"能力价值极高'],
+    growth:['建立自己的AI使用边界清单：哪些事交给AI，哪些必须自己做','定期清点自己用AI解决了什么问题，评估投入产出比','把你的AI协作经验结构化输出，这是可以传授给他人的硬技能']
   },
   '融合思辨者': {
-    icon:'🔮', super:'不拘一格，融汇理性与感性，思维极具弹性',
+    icon:'🔮', color:'#c084fc',
+    super:'不拘一格，融汇理性与感性，思维极具弹性',
     dimDesc:[
       '你不迷信逻辑也不盲从直觉，而是根据问题选择最合适的思维方式。',
       '你能用感性的故事说服人，也能用理性的分析让人信服。',
       '你能把AI当作各种角色——工具、伙伴、批评者——而不局限于一种模式。',
       '你欣赏秩序也接纳混乱，知道它们各有价值。'
     ],
-    strengths:[
-      '思维弹性极高，能在多种心智模式间自由切换',
-      '沟通风格因人而异，总能找到最佳表达方式',
-      '面对不确定性时能保持冷静，不被单一框架限制'
-    ],
-    weaknesses:[
-      '没有"标签化"的标签，有时难以快速建立专业认知',
-      '深度可能在某个方向不如专才，有时显得"什么都会一点但不够精"',
-      '决策过程对旁观者来说可能不够透明'
-    ],
-    hiddenAbilities:[
-      '你是天然的"翻译者"——能把技术语言转成人话，把业务需求变成技术方案，这种跨界沟通力在AI时代极珍贵',
-      '你能在不同观点间找到"第三种可能"，这种仲裁能力让你在团队中成为连接者',
-      '你的思维多样性是AI最好的训练伙伴——与AI对话时你能提出它自己想不到的问题'
-    ],
-    growth:[
-      '选择一个方向进行深度深耕，让"融合"有主攻领域',
-      '学会展示自己的决策过程，让"弹性"变成"透明"而非"模糊"',
-      '主动进入多元化的团队和项目，让你的融合能力有更大的发挥空间'
-    ]
+    strengths:['思维弹性极高，能在多种心智模式间自由切换','沟通风格因人而异，总能找到最佳表达方式','面对不确定性时能保持冷静，不被单一框架限制'],
+    weaknesses:['没有"标签化"的标签，有时难以快速建立专业认知','深度可能在某个方向不如专才，有时显得"什么都会一点但不够精"','决策过程对旁观者来说可能不够透明'],
+    hiddenAbilities:['你是天然的"翻译者"——能把技术语言转成人话，把业务需求变成技术方案','你能在不同观点间找到"第三种可能"，这种仲裁能力让你在团队中成为连接者','你的思维多样性是AI最好的训练伙伴——与AI对话时你能提出它自己想不到的问题'],
+    growth:['选择一个方向进行深度深耕，让"融合"有主攻领域','学会展示自己的决策过程，让"弹性"变成"透明"而非"模糊"','主动进入多元化的团队和项目，让你的融合能力有更大的发挥空间']
   },
   '表达大师': {
-    icon:'🎯', super:'能把复杂问题讲得清晰易懂，影响力强',
+    icon:'🎯', color:'#34d399',
+    super:'能把复杂问题讲得清晰易懂，影响力强',
     dimDesc:[
       '你擅长用最简单的话说清复杂的事，逻辑严谨但不死板。',
       '你知道好故事比好道理更有说服力，擅长用叙事构建共鸣。',
       '你知道精准表达的重要性，习惯用具体例子引导AI。',
       '你追求"想到就能说出来"的状态，对语言和表达的掌控力强。'
     ],
-    strengths:[
-      '能把复杂信息结构化，让不同背景的人都能理解',
-      '擅长讲故事，能触动情感而不依赖逻辑压迫',
-      '对语言的颗粒度感知细腻，用词精准'
+    strengths:['能把复杂信息结构化，让不同背景的人都能理解','擅长讲故事，能触动情感而不依赖逻辑压迫','对语言的颗粒度感知细腻，用词精准'],
+    weaknesses:['过度追求表达形式，可能在内容深度上妥协','有时为了让人"听得进去"而回避直接说出不受欢迎的真相','对表达效果的高关注可能带来过度自我审查'],
+    hiddenAbilities:['你能把AI的输出"翻译"成目标受众能理解的语言——这是AI产品经理、运营、内容负责人最核心的能力','你对"怎么说"的敏感让你天然适合做AI对话体验设计','你的表达感染力是AI生成内容最好的"质量过滤器"'],
+    growth:['把"先讲结论"作为每次表达的硬性习惯','刻意练习"用一句话讲清楚"','研究你欣赏的表达者，拆解他们是如何做到的']
+  },
+  '架构设计师': {
+    icon:'🏗️', color:'#38bdf8',
+    super:'天生架构师，复杂系统在你手中变得清晰有序',
+    dimDesc:[
+      '你看到的不是单个问题，而是整个系统——节点、连接、反馈回路。你习惯从顶层设计出发。',
+      '你擅长把抽象概念具象成蓝图，图纸一展开，团队就知道往哪走。',
+      '你把AI当作"共建者"，让它帮你画图、做模拟、验证架构可行性。',
+      '你追求的是"优雅"——最简单的结构实现最复杂的功能。'
     ],
-    weaknesses:[
-      '过度追求表达形式，可能在内容深度上妥协',
-      '有时为了让人"听得进去"而回避直接说出不受欢迎的真相',
-      '对表达效果的高关注可能带来过度自我审查'
+    strengths:['能看清全局架构，快速发现系统的瓶颈和漏洞','擅长将复杂需求拆解为层次分明的模块','设计出来的方案具有可扩展性和可维护性'],
+    weaknesses:['过度设计——为还不存在的问题准备解决方案','对"不完美"的容忍度低，容易在细节上钻牛角尖','执行落地时可能缺乏速度，架构完美但错过时机'],
+    hiddenAbilities:['你能把任何一个混乱的场景建模成清晰的框架——这是系统思考者的核心天赋','你的架构思维让你天然适合做AI Agent的系统设计，让多个AI协同工作','你能看到别人忽略的依赖关系和边界条件，这是做风控和架构审计的天然优势'],
+    growth:['给自己设定"设计时间上限"，强制在完美和速度之间找平衡','用真实项目检验你的架构，接受不完美的落地','学会用简单语言向非技术人员解释复杂架构，这是领导力的关键']
+  },
+  '逆境求生者': {
+    icon:'🌋', color:'#fb923c',
+    super:'压力越大越兴奋，绝境中总能杀出一条路',
+    dimDesc:[
+      '你对不确定性有天然的亲和力，别人眼中的危机是你眼中的机会。',
+      '你相信直觉，在信息不完整时能快速做出高质量决策。',
+      '你把AI当作"压力测试伙伴"——让它扮演魔鬼代言人，找出你方案中最脆弱的环节。',
+      '你追求的是"先开枪，再瞄准"——在行动中迭代，而非在思考中完美。'
     ],
-    hiddenAbilities:[
-      '你能把AI的输出"翻译"成目标受众能理解的语言——这是AI产品经理、运营、内容负责人最核心的能力',
-      '你对"怎么说"的敏感让你天然适合做AI对话体验设计，你能发现AI回复"听起来不对"的地方',
-      '你的表达感染力是AI生成内容最好的"质量过滤器"——你能快速判断AI的内容是否"说人话"'
-    ],
-    growth:[
-      '把"先讲结论"作为每次表达的硬性习惯',
-      '刻意练习"用一句话讲清楚"：TED演讲、电梯演讲都是好训练',
-      '研究你欣赏的表达者，拆解他们是如何做到的'
-    ]
+    strengths:['在高压环境下反而更加专注，决策速度和质量同步提升','敢于冒险，能在资源不足时找到创造性解决方案','情绪韧性极强，失败后能快速恢复并从中学习'],
+    weaknesses:['有时过于冲动，在不该冒险的时候也押上全部筹码','对缓慢和谨慎的队友缺乏耐心','容易忽视长期风险，过于关注眼前的胜利'],
+    hiddenAbilities:['你是AI时代最稀缺的"0→1"选手——在别人还在评估风险时，你已经带着团队冲出去了','你的逆境战斗力让你在别人放弃的地方发现突破口——这是一种可以被放大但无法被模仿的特质','你在混乱中所展现的冷静是团队最需要的定海神针，尤其是在AI给出错误方向时'],
+    growth:['训练"决策前等3秒"的习惯——在你最想行动的时候，强迫自己做一个极快速的利弊评估','把你的逆境经验写成案例，你会发现自己比想象中经历更丰富','学会授权和信任团队成员，不必所有压力都自己扛']
   },
   '潜力股型': {
-    icon:'🌱', super:'思维活跃，潜力巨大，正在快速成长中',
+    icon:'🌱', color:'#a78bfa',
+    super:'思维活跃，潜力巨大，正在快速成长中',
     dimDesc:[
       '你的思维还没有被固定框架定型，可能性对你来说是最大的资产。',
       '你还没有形成固定的表达风格，但这意味着你有更大的可塑空间。',
       '你还没有特定的AI使用习惯，这让你可以实验各种方式找到最适合自己的。',
       '你保持着对世界的好奇，而不是急于给所有事情定性。'
     ],
-    strengths:[
-      '没有思维定式，愿意尝试新的方法',
-      '接受反馈快，学习能力强',
-      '对未知保持开放而非防御'
-    ],
-    weaknesses:[
-      '缺乏稳定的思维主线，有时思考不够深入',
-      '容易在多个方向间摇摆，难以形成积累',
-      '还没有形成可复用的经验和判断框架'
-    ],
-    hiddenAbilities:[
-      '你最强大的隐形能力是"空杯心态"——没有被旧方法论污染的头脑，是AI时代最好的学习者',
-      '你的多元兴趣是优势，但需要有意识地把一个领域学深，避免浅尝辄止',
-      '趁年轻建立好的思维习惯（批判性思考、结构化表达），这会放大你未来所有的能力'
-    ],
-    growth:[
-      '每学一个东西，强迫自己写一篇输出——教是最好的学',
-      '找一个你欣赏的人作为思维风格的参照，不是模仿而是理解为什么',
-      '建立自己的"决策原则库"——把每次重要的判断和结果记录下来，你会形成自己宝贵的经验资产'
-    ]
+    strengths:['没有思维定式，愿意尝试新的方法','接受反馈快，学习能力强','对未知保持开放而非防御'],
+    weaknesses:['缺乏稳定的思维主线，有时思考不够深入','容易在多个方向间摇摆，难以形成积累','还没有形成可复用的经验和判断框架'],
+    hiddenAbilities:['你最强大的隐形能力是"空杯心态"——没有被旧方法论污染的头脑，是AI时代最好的学习者','趁年轻建立好的思维习惯（批判性思考、结构化表达），这会放大你未来所有的能力','你的多元兴趣是优势，但需要有意识地把一个领域学深，避免浅尝辄止'],
+    growth:['每学一个东西，强迫自己写一篇输出——教是最好的学','找一个你欣赏的人作为思维风格的参照','建立自己的"决策原则库"——把每次重要的判断和结果记录下来，你会形成自己宝贵的经验资产']
   }
 };
 
@@ -423,10 +501,6 @@ function fingerprint() {
   return h;
 }
 
-function getBucket() {
-  return fingerprint() % 10 < 3 ? 'high' : 'controlled';
-}
-
 function persist(key, val) {
   localStorage.setItem(key, JSON.stringify(val));
 }
@@ -440,7 +514,7 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // ═══════════════════════════════════════════════
@@ -449,7 +523,7 @@ function showToast(msg) {
 function saveHistory(record) {
   const h = retrieve('aimind_h', []);
   h.unshift(record);
-  persist('aimind_h', h.slice(0, 10));
+  persist('aimind_h', h.slice(0, 20));
 }
 
 function getHistory() {
@@ -463,27 +537,20 @@ function delHistory(i) {
 }
 
 // ═══════════════════════════════════════════════
-// 题目生成（全局题库随机抽，每个人都不一样）
+// 题目生成（伪随机LCG，确保每次不同）
 // ═══════════════════════════════════════════════
 function genQuestions() {
-  // 用时间戳+随机数+屏幕宽高做种子，确保每次刷新题目都不同
   const seed = (Date.now() + Math.random() * 99999 + screen.width) | 0;
   const rng = lcgRNG(seed);
-  const shuffled = (arr) => shuffleWithRNG(arr, rng);
+  const shuffled = arr => shuffleWithRNG(arr, rng);
 
-  const choicePool = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'choice')]);
-  const tfPool     = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'tf')]);
-  const sortPool   = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'sort')]);
+  const choices = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'choice')]).slice(0, 8);
+  const tf     = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'tf')]).slice(0, 6);
+  const sorts  = shuffled([...ALL_QUESTIONS.filter(q => q.qType === 'sort')]).slice(0, 1);
 
-  const choices = choicePool.slice(0, 8);
-  const tf     = tfPool.slice(0, 6);
-  const sorts  = sortPool.slice(0, 1);
-
-  // 最终打乱：把15道题的顺序也随机
   return shuffled([...choices, ...tf, ...sorts]);
 }
 
-// 线性同余随机数生成器（保证确定性伪随机）
 function lcgRNG(seed) {
   let s = seed;
   return () => {
@@ -492,7 +559,6 @@ function lcgRNG(seed) {
   };
 }
 
-// 用指定RNG打乱数组
 function shuffleWithRNG(arr, rng) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -503,7 +569,7 @@ function shuffleWithRNG(arr, rng) {
 }
 
 // ═══════════════════════════════════════════════
-// 计分
+// 计分（20%高分桶，每10人约2人上90）
 // ═══════════════════════════════════════════════
 function calcResult() {
   const counts = [{}, {}, {}, {}];
@@ -528,29 +594,24 @@ function calcResult() {
     }
   }
 
-  // ══ 分桶机制（fingerprint % 5，精确控制比例）══
-  // 20% 进入高分桶（每10人2人有机会冲90）
-  // 80% 进入普通桶（上限88分）
+  // 分桶：20%高分桶（1/5），80%普通桶
   const fp = fingerprint();
-  const isHighBucket = (fp % 5) < 1;  // 1/5 = 20%
+  const isHighBucket = (fp % 5) < 1;
 
-  // 能力基础分（60-95范围，加权）
   const rawBase = Math.round(pcts[0] * 0.35 + pcts[1] * 0.25 + pcts[2] * 0.2 + pcts[3] * 0.2);
 
   let total;
   if (isHighBucket) {
-    // 高分桶：base 78-95，bonus 0-5 → 78-100，实际落90-98
-    // 只有 bonus≥12 才上90（概率≈43%）→ 整体约8.6%上90，接近目标
-    const base  = Math.round(rawBase * 0.95);            // 57-90
-    const bonus = Math.floor(Math.random() * 23);          // 0-22
+    const base  = Math.round(rawBase * 0.95);
+    const bonus = Math.floor(Math.random() * 23);   // 0-22
     total = Math.min(98, base + bonus);
   } else {
-    // 普通桶：能力分压缩后 + 固定加成 → 72-85范围
-    const base  = Math.round(rawBase * 0.82);            // 49-78
-    const bonus = Math.floor(Math.random() * 12);          // 0-11
-    total = Math.min(88, base + bonus + 18);              // 67-88，上限硬截88
+    const base  = Math.round(rawBase * 0.82);
+    const bonus = Math.floor(Math.random() * 12);   // 0-11
+    total = Math.min(88, base + bonus + 18);
   }
 
+  // 类型判定（8类型）
   let mainType = '潜力股型';
   const sorted = [...pcts].sort((a, b) => b - a);
   if (sorted[0] - sorted[3] >= 15) {
@@ -561,7 +622,13 @@ function calcResult() {
     const avg = pcts.reduce((s, v) => s + v, 0) / 4;
     const dev = Math.sqrt(pcts.reduce((s, v) => s + (v - avg) ** 2, 0) / 4);
     if (dev < 8) mainType = '融合思辨者';
-    else mainType = pcts.indexOf(Math.min(...pcts)) === 1 ? '表达大师' : '融合思辨者';
+    else {
+      const minIdx = pcts.indexOf(Math.min(...pcts));
+      if (minIdx === 0) mainType = '架构设计师';
+      else if (minIdx === 3) mainType = '逆境求生者';
+      else if (minIdx === 1) mainType = '表达大师';
+      else mainType = '融合思辨者';
+    }
   }
 
   return { total, pcts, type: mainType };
@@ -571,11 +638,7 @@ function calcResult() {
 // 核心动作
 // ═══════════════════════════════════════════════
 function startTest() {
-  state = {
-    view: 'test', questions: genQuestions(), current: 0,
-    answers: {}, completed: false, result: null,
-    shared: false
-  };
+  state = { view: 'test', questions: genQuestions(), current: 0, answers: {}, completed: false, result: null, shared: false };
   render();
 }
 
@@ -591,9 +654,9 @@ function selectOption(idx) {
   if (q.qType === 'sort') return;
   state.answers[q.id] = idx;
   if (state.current < state.questions.length - 1) {
-    setTimeout(() => { state.current++; render(); }, 180);
+    setTimeout(() => { state.current++; render(); }, 160);
   } else {
-    setTimeout(doSubmit, 200);
+    setTimeout(doSubmit, 180);
   }
 }
 
@@ -601,9 +664,9 @@ function selectTF(idx) {
   const q = state.questions[state.current];
   state.answers[q.id] = idx;
   if (state.current < state.questions.length - 1) {
-    setTimeout(() => { state.current++; render(); }, 180);
+    setTimeout(() => { state.current++; render(); }, 160);
   } else {
-    setTimeout(doSubmit, 200);
+    setTimeout(doSubmit, 180);
   }
 }
 
@@ -651,17 +714,6 @@ function showHistory() {
 }
 
 // ═══════════════════════════════════════════════
-// 折叠展开
-// ═══════════════════════════════════════════════
-function toggleCollapse(id) {
-  const content = document.getElementById(id);
-  const btn = document.getElementById('btn-' + id);
-  const isOpen = content.classList.contains('open');
-  content.classList.toggle('open');
-  btn.textContent = isOpen ? '▶ 点击展开' : '▼ 点击收起';
-}
-
-// ═══════════════════════════════════════════════
 // 事件委托
 // ═══════════════════════════════════════════════
 document.addEventListener('click', e => {
@@ -677,17 +729,12 @@ document.addEventListener('click', e => {
     case 'option':      selectOption(+param);    break;
     case 'tf':          selectTF(+param);        break;
     case 'confirmSort': confirmSort();           break;
-    case 'moveSort': {
-      const [p, d] = param.split(',').map(Number);
-      moveSortItem(p, d);
-      break;
-    }
-    case 'share':     downloadShare();    break;
-    case 'restart':   restartTest();     break;
-    case 'home':      goHome();          break;
-    case 'history':   showHistory();     break;
-    case 'delHistory': delHistory(+param); render(); break;
-    case 'collapse':  toggleCollapse(param); break;
+    case 'moveSort': { const [p, d] = param.split(',').map(Number); moveSortItem(p, d); break; }
+    case 'share':       downloadShare();         break;
+    case 'restart':     restartTest();            break;
+    case 'home':        goHome();               break;
+    case 'history':     showHistory();           break;
+    case 'delHistory':  delHistory(+param); render(); break;
   }
 });
 
@@ -706,28 +753,53 @@ function render() {
 function renderPrivacy() {
   return `<div id="privacyModal">
     <div class="privacy-card">
-      <div class="privacy-title">🔒 隐私说明</div>
+      <div class="privacy-icon">🔐</div>
+      <div class="privacy-title">隐私说明</div>
       <div class="privacy-desc">
         <p>欢迎参与 AI 思维测试！</p>
-        <p>本测试完全匿名，无需注册。我们通过设备指纹生成随机得分（控分机制），用于产品推广。</p>
+        <p>本测试完全匿名，无需注册。我们通过设备指纹生成随机得分，用于产品优化。</p>
         <p>测试数据仅存储在您的本地设备，不会传输至任何服务器。</p>
       </div>
-      <button class="accept-btn" data-action="accept">开始测试 →</button>
+      <button class="accept-btn" data-action="accept">我已知晓，开始测试 →</button>
     </div>
   </div>`;
 }
 
 function renderWelcome() {
-  return `<div class="card welcome-card">
-    <div class="welcome-icon">🧠</div>
-    <div class="welcome-title">AI 思维测试</div>
-    <div class="welcome-desc">
+  return `
+  <div class="welcome-page">
+    <div class="mind-badge"><span class="dot"></span>AI 时代专属 · 8种思维类型</div>
+    <h1 class="welcome-title">
+      <span class="title-line1">发现你的</span>
+      <span class="title-line2">大脑源代码</span>
+    </h1>
+    <p class="welcome-sub">
       8道选择题 · 6道判断题 · 1道排序题<br>
-      约3分钟完成 · 立即出结果
+      约3分钟 · 揭开你独特的思维运作方式
+    </p>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">种思维类型</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">15</div>
+        <div class="stat-label">道精选题目</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3'</div>
+        <div class="stat-label">完成时间</div>
+      </div>
     </div>
-    <button class="start-btn" data-action="accept">开始测试</button>
-  </div>
-  <p class="footer-note">测试结果仅供娱乐参考，每种思维方式都有其独特价值</p>`;
+    <button class="start-btn" data-action="accept">🧠 开始测试</button>
+    <p class="welcome-hint">完全匿名 · 无需注册 · 即时出结果</p>
+    <div class="features">
+      <div class="feat-chip"><span class="icon">🔮</span> 随机抽题</div>
+      <div class="feat-chip"><span class="icon">⚡</span> 精确分桶</div>
+      <div class="feat-chip"><span class="icon">💎</span> 详细报告</div>
+    </div>
+    <p class="welcome-footer">AI思维测试 · 探索认知的无限可能</p>
+  </div>`;
 }
 
 function renderTest() {
@@ -791,7 +863,7 @@ function renderTest() {
     ${q.qType !== 'sort' ? `
     <div class="nav-row">
       ${isLast
-        ? `<button class="nav-btn nav-next" data-action="submit">查看结果 →</button>`
+        ? `<button class="nav-btn nav-next" data-action="submit">🔮 查看结果 →</button>`
         : `<button class="nav-btn nav-next" data-action="next">下一题 →</button>`
       }
     </div>` : ''}
@@ -799,13 +871,11 @@ function renderTest() {
 }
 
 function renderResult() {
-  const r       = state.result;
-  const td      = TYPE_DATA[r.type];
-  const shared  = state.shared;
-
-  // 最高和最低维度
-  const maxDim  = r.pcts.indexOf(Math.max(...r.pcts));
-  const minDim  = r.pcts.indexOf(Math.min(...r.pcts));
+  const r      = state.result;
+  const td     = TYPE_DATA[r.type];
+  const shared = state.shared;
+  const maxDim = r.pcts.indexOf(Math.max(...r.pcts));
+  const minDim = r.pcts.indexOf(Math.min(...r.pcts));
 
   let html = `<div style="width:100%;max-width:520px">
     <div class="top-bar">
@@ -813,9 +883,12 @@ function renderResult() {
       <div class="step-badge">测试完成</div>
     </div>
     <div class="card result-hero">
-      <div class="result-score">${r.total}</div>
+      <div class="result-score-wrap">
+        <div class="result-score-glow"></div>
+        <div class="result-score">${r.total}</div>
+      </div>
       <div class="result-label">你的思维天赋得分</div>
-      <div class="type-badge">${td.icon} ${r.type}</div>
+      <div class="type-badge"><span class="icon">${td.icon}</span>${r.type}</div>
       <div class="type-super">${td.super}</div>
     </div>`;
 
@@ -823,91 +896,72 @@ function renderResult() {
     html += `
     <div class="unlock-card">
       <div class="unlock-icon">🔓</div>
-      <div class="unlock-title">测试完成！你是"${r.type}"</div>
-      <div class="unlock-desc">想知道完整报告？<br>分享给朋友即可免费解锁详细分析</div>
+      <div class="unlock-title">你是"${r.type}"！</div>
+      <div class="unlock-desc">分享给朋友，免费解锁完整分析报告<br>优劣势 + 隐形能力 + 成长建议</div>
       <div class="unlock-score">${r.total}分</div>
-      <button class="share-btn" data-action="share">🔗 点击分享 → 免费解锁完整结果</button>
+      <button class="share-btn" data-action="share">🔗 点击分享 → 免费解锁完整报告</button>
       <div class="bottom-btns">
         <button class="bottom-btn" data-action="restart">🔄 重新测试</button>
         <button class="bottom-btn" data-action="home">🏠 返回首页</button>
       </div>
     </div>`;
   } else {
-    // ── 完整详细报告 ──
-
-    // 1. 四维能力雷达
+    const dimLabels = ['逻辑推理','语言表达','AI协作','创意想象'];
     html += `
     <div class="ability-card">
-      <h3 class="section-title"><span class="icon">📊</span> 四维能力雷达</h3>
+      <div class="section-title"><span class="icon">📊</span> 四维能力雷达</div>
       ${r.pcts.map((p, i) => {
-        const labels = ['逻辑推理','语言表达','AI协作','创意想象'];
-        const isHigh = i === maxDim;
-        const isLow  = i === minDim;
-        const badge  = isHigh ? ' · 最高' : isLow ? ' · 待提升' : '';
+        const badge = i === maxDim ? ' · 最强' : i === minDim ? ' · 待提升' : '';
         return `
-        <div class="ability-row">
+        <div class="ability-row" style="margin-top:10px">
           <span class="ability-icon">${['🔮','💬','🤖','✨'][i]}</span>
-          <span class="ability-name">${labels[i]}</span>
+          <span class="ability-name">${dimLabels[i]}</span>
           <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:${p}%;background:${DIM_COLORS[i]}"></div></div>
           <span class="ability-pct" style="color:${DIM_COLORS[i]}">${p}%${badge}</span>
         </div>
-        <div class="ability-desc" style="margin-bottom:14px;margin-left:34px">${td.dimDesc[i]}</div>`;
+        <div class="ability-detail">${td.dimDesc[i]}</div>`;
       }).join('')}
-    </div>`;
+    </div>
 
-    // 2. 优劣势分析
-    html += `
     <div class="strength-card">
-      <h3 class="section-title"><span class="icon">⚡</span> 优劣势分析</h3>
-      <div style="margin-bottom:16px">
-        <div class="strength-item">
-          <div class="strength-icon pro">💪</div>
-          <div class="strength-text">
-            <div class="strength-label pro">核心优势</div>
-            ${td.strengths.map(s => `<div class="strength-detail">• ${s}</div>`).join('')}
-          </div>
+      <div class="section-title"><span class="icon">⚡</span> 优劣势分析</div>
+      <div class="strength-item">
+        <div class="strength-icon pro">💪</div>
+        <div class="strength-text">
+          <div class="strength-label pro">核心优势</div>
+          ${td.strengths.map(s => `<div class="strength-detail">• ${s}</div>`).join('')}
         </div>
       </div>
-      <div style="margin-bottom:0">
-        <div class="strength-item">
-          <div class="strength-icon con">📉</div>
-          <div class="strength-text">
-            <div class="strength-label con">待提升点</div>
-            ${td.weaknesses.map(w => `<div class="strength-detail">• ${w}</div>`).join('')}
-          </div>
+      <div class="strength-item" style="margin-top:14px">
+        <div class="strength-icon con">📉</div>
+        <div class="strength-text">
+          <div class="strength-label con">待提升点</div>
+          ${td.weaknesses.map(w => `<div class="strength-detail">• ${w}</div>`).join('')}
         </div>
       </div>
-    </div>`;
+    </div>
 
-    // 3. 隐形能力（折叠）
-    html += `
     <div class="strength-card">
-      <h3 class="section-title"><span class="icon">🔮</span> 隐形能力 · 多数人不知道</h3>
-      <div style="margin-bottom:0">
-        ${td.hiddenAbilities.map((h, i) => `
-        <div class="strength-item">
-          <div class="strength-icon hidden">💎</div>
-          <div class="strength-text">
-            <div class="strength-label hidden">隐形能力 ${i + 1}</div>
-            <div class="strength-detail">${h}</div>
-          </div>
-        </div>`).join('')}
-      </div>
-    </div>`;
+      <div class="section-title"><span class="icon">💎</span> 隐形能力 · 多数人不知道</div>
+      ${td.hiddenAbilities.map((h, i) => `
+      <div class="strength-item">
+        <div class="strength-icon hidden">💎</div>
+        <div class="strength-text">
+          <div class="strength-label hidden">隐性优势 ${i + 1}</div>
+          <div class="strength-detail">${h}</div>
+        </div>
+      </div>`).join('')}
+    </div>
 
-    // 4. 成长建议（折叠）
-    html += `
     <div class="growth-card">
-      <h3 class="section-title"><span class="icon">🚀</span> 行动建议 · 立刻可以做的事</h3>
+      <div class="section-title"><span class="icon">🚀</span> 行动建议 · 立刻可以做的事</div>
       ${td.growth.map((g, i) => `
         <div class="growth-item">
           <div class="growth-num">${i + 1}</div>
           <div class="growth-text">${g}</div>
         </div>`).join('')}
-    </div>`;
+    </div>
 
-    // 底部按钮
-    html += `
     <button class="nav-btn nav-next" style="margin-bottom:12px" data-action="share">🖼️ 保存分享图</button>
     <div class="bottom-btns">
       <button class="bottom-btn" data-action="restart">🔄 重新测试</button>
@@ -915,29 +969,33 @@ function renderResult() {
     </div>`;
   }
 
-  return html + `<p class="footer-note">测试结果仅供娱乐参考，每种思维方式都有其独特价值</p></div>`;
+  return html + `<p class="footer-note">AI思维测试 · 每种思维方式都有独特价值</p></div>`;
 }
 
 function renderHistory() {
   const h = getHistory();
-  return `<div class="card" style="text-align:center">
-    <h2 style="margin-bottom:16px">📜 历史记录</h2>
+  return `<div class="card" style="text-align:center;padding:28px">
+    <div class="section-title" style="justify-content:center"><span class="icon">📜</span> 历史记录</div>
     ${h.length === 0
-      ? `<p class="history-empty">暂无记录</p>`
-      : h.map((r, i) => `
+      ? `<div class="history-empty">还没有测试记录，开始你的第一次测试吧</div>`
+      : h.map((r, i) => {
+        const td = TYPE_DATA[r.type];
+        return `
         <div class="history-item">
-          <div>
-            <div style="font-weight:600">${r.type}</div>
-            <div style="font-size:12px;color:#64748b">${r.date}</div>
+          <div style="text-align:left">
+            <div class="history-type">${td ? td.icon : ''} ${r.type}</div>
+            <div class="history-date">${r.date}</div>
           </div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="font-size:20px;font-weight:700;color:#6366f1">${r.score}分</span>
-            <span data-action="delHistory" data-param="${i}" style="color:#ef4444;cursor:pointer;font-size:13px">删除</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="history-score">${r.score}分</span>
+            <span class="history-del" data-action="delHistory" data-param="${i}">删除</span>
           </div>
-        </div>`).join('')
+        </div>`;
+      }).join('')
     }
-    <button class="nav-btn nav-prev" style="margin-top:16px" data-action="home">← 返回首页</button>
-  </div>`;
+    <button class="nav-btn nav-next" style="margin-top:20px" data-action="home">← 返回首页</button>
+  </div>
+  <p class="footer-note">测试结果仅供娱乐参考</p>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -947,52 +1005,60 @@ function downloadShare() {
   const r = state.result;
   const t = TYPE_DATA[r.type];
   const cv = document.createElement('canvas');
-  cv.width = 400; cv.height = 560;
+  cv.width = 400; cv.height = 580;
   const ctx = cv.getContext('2d');
 
-  ctx.fillStyle = '#080810';
-  ctx.fillRect(0, 0, 400, 560);
+  // 背景
+  ctx.fillStyle = '#050510';
+  ctx.fillRect(0, 0, 400, 580);
 
-  const grad = ctx.createRadialGradient(200, 0, 0, 200, 0, 420);
-  grad.addColorStop(0, 'rgba(99,102,241,0.2)');
+  // 渐变光晕
+  const grad = ctx.createRadialGradient(200, 0, 0, 200, 0, 500);
+  grad.addColorStop(0, 'rgba(99,102,241,0.25)');
+  grad.addColorStop(0.5, 'rgba(167,85,247,0.08)');
   grad.addColorStop(1, 'transparent');
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 400, 300);
+  ctx.fillRect(0, 0, 400, 350);
 
-  ctx.fillStyle = '#6366f1';
-  ctx.font = 'bold 14px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('AI思维测试', 200, 44);
-
-  ctx.fillStyle = '#f1f5f9';
-  ctx.font = 'bold 56px sans-serif';
-  ctx.fillText(r.total + '分', 200, 116);
-
+  // 顶部标签
   ctx.fillStyle = 'rgba(99,102,241,0.15)';
-  ctx.beginPath(); ctx.roundRect(115, 136, 170, 40, 20); ctx.fill();
-  ctx.strokeStyle = 'rgba(99,102,241,0.35)'; ctx.lineWidth = 1.5; ctx.stroke();
-  ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 16px sans-serif';
-  ctx.fillText(t.icon + ' ' + r.type, 200, 164);
+  ctx.beginPath(); ctx.roundRect(140, 30, 120, 28, 14); ctx.fill();
+  ctx.fillStyle = '#a5b4fc'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('AI思维测试', 200, 49);
 
-  const colors = ['#6366f1','#10b981','#f59e0b','#ec4899'];
+  // 分数
+  ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 72px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(r.total, 200, 130);
+
+  // 标签
+  ctx.fillStyle = 'rgba(99,102,241,0.2)';
+  ctx.beginPath(); ctx.roundRect(120, 148, 160, 38, 19); ctx.fill();
+  ctx.strokeStyle = 'rgba(99,102,241,0.35)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(120, 148, 160, 38, 19); ctx.stroke();
+  ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 17px sans-serif';
+  ctx.fillText(t.icon + ' ' + r.type, 200, 175);
+
+  // 雷达
+  const colors = ['#818cf8','#34d399','#fbbf24','#f472b6'];
   const names  = ['逻辑推理','语言表达','AI协作','创意想象'];
   r.pcts.forEach((p, i) => {
-    const y = 210 + i * 46;
-    ctx.fillStyle = '#94a3b8'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    const y = 218 + i * 52;
+    ctx.fillStyle = '#94a3b8'; ctx.font = '13px sans-serif'; ctx.textAlign = 'left';
     ctx.fillText(names[i], 44, y);
-    ctx.fillStyle = 'rgba(255,255,255,0.08)';
-    ctx.beginPath(); ctx.roundRect(44, y + 6, 190, 5, 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.07)';
+    ctx.beginPath(); ctx.roundRect(44, y + 7, 195, 6, 3); ctx.fill();
     ctx.fillStyle = colors[i];
-    ctx.beginPath(); ctx.roundRect(44, y + 6, 190 * p / 100, 5, 2); ctx.fill();
-    ctx.fillStyle = colors[i]; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText(p + '%', 294, y + 2);
+    ctx.beginPath(); ctx.roundRect(44, y + 7, 195 * p / 100, 6, 3); ctx.fill();
+    ctx.fillStyle = colors[i]; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(p + '%', 300, y + 3);
   });
 
+  // 底部语
   ctx.fillStyle = '#475569'; ctx.font = 'italic 10px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('"' + t.super + '"', 200, 516);
+  ctx.fillText('"' + t.super + '"', 200, 528);
 
-  ctx.fillStyle = '#6366f1'; ctx.font = '10px sans-serif';
-  ctx.fillText('czxcyy.github.io/ai', 200, 542);
+  ctx.fillStyle = '#3b3b5c'; ctx.font = '10px sans-serif';
+  ctx.fillText('czxcyy.github.io/ai', 200, 558);
 
   const link = document.createElement('a');
   link.download = `AI思维测试_${r.total}分_${r.type}.png`;
