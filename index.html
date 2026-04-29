@@ -19,12 +19,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .accept-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer}
 
 /* ── 通用布局 ── */
-.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:480px;margin-bottom:16px}
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:520px;margin-bottom:16px}
 .logo{font-size:16px;font-weight:700}
 .step-badge{background:rgba(99,102,241,0.15);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:600}
 
 /* ── 进度条 ── */
-.progress-wrap{width:100%;max-width:480px;margin-bottom:20px}
+.progress-wrap{width:100%;max-width:520px;margin-bottom:20px}
 .progress-track{height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin-bottom:10px}
 .progress-thumb{height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:4px;transition:width .3s}
 .progress-dots{display:flex;gap:5px;flex-wrap:wrap}
@@ -33,7 +33,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .p-dot.active{background:#a78bfa;transform:scale(1.3)}
 
 /* ── 题目卡片 ── */
-.card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:24px;width:100%;max-width:480px;margin-bottom:16px}
+.card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:24px;width:100%;max-width:520px;margin-bottom:16px}
 .q-type-tag{display:inline-block;background:rgba(99,102,241,0.15);color:#a5b4fc;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:10px}
 .q-dim{color:#64748b;font-size:12px;margin-left:8px}
 .question-text{font-size:16px;font-weight:600;line-height:1.6;margin-bottom:20px}
@@ -63,10 +63,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sort-text{flex:1;font-size:14px}
 .sort-btn{background:rgba(255,255,255,0.06);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;color:#94a3b8;font-size:13px;touch-action:manipulation}
 .sort-btn:disabled{opacity:0.3;cursor:not-allowed}
-.sort-confirm-btn{width:100%;max-width:480px;padding:15px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,0.25)}
+.sort-confirm-btn{width:100%;max-width:520px;padding:15px;background:linear-gradient(135deg,#6366f1,#7c3aed);color:white;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,0.25)}
 
 /* ── 导航按钮 ── */
-.nav-row{display:flex;gap:10px;width:100%;max-width:480px}
+.nav-row{display:flex;gap:10px;width:100%;max-width:520px}
 .nav-btn{flex:1;padding:15px;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s}
 .nav-prev{background:rgba(255,255,255,0.06);color:#94a3b8}
 .nav-prev:hover{background:rgba(255,255,255,0.1)}
@@ -74,38 +74,71 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-next:hover{opacity:0.92}
 
 /* ── 结果页 ── */
-.result-hero{text-align:center;padding:16px 0 28px}
-.result-score{font-size:80px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
+.result-hero{text-align:center;padding:16px 0 24px}
+.result-score{font-size:72px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
 .result-label{color:#64748b;font-size:13px;margin-bottom:16px}
-.type-badge{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:40px;font-size:16px;font-weight:700}
+.type-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:40px;font-size:15px;font-weight:700}
+.type-super{font-size:13px;color:#94a3b8;margin-top:12px;line-height:1.6}
 
 /* ── 分享解锁 ── */
-.unlock-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.08));border:2px solid rgba(16,185,129,0.3);border-radius:20px;padding:32px 24px;margin-bottom:18px;text-align:center}
-.unlock-icon{font-size:52px;margin-bottom:14px}
-.unlock-title{font-size:19px;font-weight:700;margin-bottom:10px}
-.unlock-desc{font-size:13px;color:#94a3b8;line-height:1.7;margin-bottom:16px}
-.unlock-score{font-size:26px;font-weight:800;color:#10b981;margin:14px 0}
+.unlock-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.08));border:2px solid rgba(16,185,129,0.3);border-radius:20px;padding:28px 24px;margin-bottom:18px;text-align:center}
+.unlock-icon{font-size:48px;margin-bottom:12px}
+.unlock-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.unlock-desc{font-size:13px;color:#94a3b8;line-height:1.7;margin-bottom:14px}
+.unlock-score{font-size:24px;font-weight:800;color:#10b981;margin:12px 0}
 .share-btn{width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(16,185,129,0.3)}
 .bottom-btns{display:flex;gap:10px;margin-top:12px}
 .bottom-btn{flex:1;padding:13px;background:rgba(255,255,255,0.06);color:#94a3b8;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer}
 .bottom-btn:hover{background:rgba(255,255,255,0.1)}
 
-/* ── 能力雷达 ── */
-.ability-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:480px;margin-bottom:14px}
+/* ── 详细报告 ── */
+.section-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.section-title .icon{font-size:16px}
+
+/* 能力雷达 */
+.ability-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
 .ability-card h3{font-size:14px;font-weight:700;margin-bottom:14px}
 .ability-row{display:flex;align-items:center;margin-bottom:12px;gap:10px}
 .ability-icon{font-size:16px;width:24px;text-align:center}
-.ability-name{font-size:13px;color:#94a3b8;width:70px;flex-shrink:0}
-.ability-bar-bg{flex:1;height:6px;background:rgba(255,255,255,0.08);border-radius:3px}
-.ability-bar-fill{height:100%;border-radius:3px;transition:width .6s}
+.ability-name{font-size:13px;color:#94a3b8;width:68px;flex-shrink:0}
+.ability-bar-bg{flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
+.ability-bar-fill{height:100%;border-radius:4px;transition:width .6s}
 .ability-pct{font-size:12px;font-weight:700;width:36px;text-align:right}
+.ability-desc{font-size:12px;color:#64748b;margin-top:2px}
 
-/* ── 特征详情 ── */
-.detail-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:480px;margin-bottom:14px}
-.detail-card h3{font-size:14px;font-weight:700;margin-bottom:12px}
-.feature-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.tag{background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:12px}
-.type-desc{font-size:13px;color:#94a3b8;line-height:1.7}
+/* 优劣势 */
+.strength-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
+.strength-item{display:flex;gap:10px;margin-bottom:14px}
+.strength-item:last-child{margin-bottom:0}
+.strength-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.strength-icon.pro{background:rgba(16,185,129,0.15)}
+.strength-icon.con{background:rgba(239,68,68,0.15)}
+.strength-icon.hidden{background:rgba(245,158,11,0.15)}
+.strength-text{flex:1}
+.strength-label{font-size:12px;font-weight:700;margin-bottom:3px}
+.strength-label.pro{color:#10b981}
+.strength-label.con{color:#ef4444}
+.strength-label.hidden{color:#f59e0b}
+.strength-detail{font-size:12px;color:#94a3b8;line-height:1.6}
+
+/* 维度详情 */
+.dim-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
+.dim-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dim-badge{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.dim-title{font-size:14px;font-weight:700}
+.dim-score{font-size:13px;font-weight:700;margin-left:auto}
+.dim-bar-bg{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-bottom:10px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:3px}
+.dim-detail{font-size:12px;color:#94a3b8;line-height:1.7}
+.dim-detail strong{color:#e2e8f0}
+
+/* 成长建议 */
+.growth-card{background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px;width:100%;max-width:520px;margin-bottom:14px}
+.growth-item{display:flex;gap:10px;margin-bottom:12px}
+.growth-item:last-child{margin-bottom:0}
+.growth-num{width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.growth-text{font-size:12px;color:#94a3b8;line-height:1.7}
+.growth-text strong{color:#e2e8f0}
 
 /* ── 欢迎页 ── */
 .welcome-card{text-align:center;max-width:400px}
@@ -123,6 +156,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toast.show{opacity:1}
 
 .footer-note{font-size:11px;color:#475569;text-align:center;margin-top:16px;max-width:400px}
+
+/* ── 报告展开折叠 ── */
+.collapse-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;cursor:pointer;padding:4px 0;margin-bottom:12px}
+.collapse-btn:hover{color:#94a3b8}
+.collapse-content{display:none}
+.collapse-content.open{display:block}
 </style>
 </head>
 <body>
@@ -134,7 +173,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 // 题目数据
 // ═══════════════════════════════════════════════
 const ALL_QUESTIONS = [
-  // 选择题 12道 → 每次抽8道
   { id:'c1',  qType:'choice', dim:0, text:'面对一个完全没有答案的难题，你会怎么做？',       options:['立刻查找相关资料，从头学起','先自己思考，尝试推导可能的解法','这个问题可能无解，暂时搁置','先问问AI能否帮忙'], tags:['explorer','thinker','sceptic','collaborator'] },
   { id:'c2',  qType:'choice', dim:1, text:'向别人解释一个复杂概念时，你通常会？',             options:['找一个形象的类比让它变得简单','按逻辑顺序一步步拆解','干脆放弃，觉得解释清楚太费劲','用画图或写出来的方式'], tags:['analogy','logical','giveup','visual'] },
   { id:'c3',  qType:'choice', dim:2, text:'使用AI工具时，你更倾向于？',                     options:['给出明确指令，让AI直接执行','和AI反复讨论，逐步完善结果','自己先做，AI只是辅助参考','把AI当伙伴，一起头脑风暴'], tags:['directive','iterative','independent','partner'] },
@@ -144,13 +182,12 @@ const ALL_QUESTIONS = [
   { id:'c7',  qType:'choice', dim:2, text:'遇到AI给出的错误答案，你会？',                    options:['立刻指出并纠正它','把错误当作学习机会','忽略它，换个问题问','让它重新思考一下'], tags:['confrontational','learning','avoidant','guiding'] },
   { id:'c8',  qType:'choice', dim:3, text:'一个常规流程可以被颠覆，你会？',                   options:['立刻提出新方案','评估后再提出建议','觉得现有方式也可以','先观望，不确定是否可行'], tags:['innovative','measured','statusquo','cautious'] },
   { id:'c9',  qType:'choice', dim:0, text:'做决策时，你更依赖什么？',                        options:['数据和事实支撑','他人的经验和意见','自己的直觉和感觉','利弊分析表格'], tags:['rational','social','intuitive','systematic'] },
-  { id:'c10', qType:'choice', dim:1, text:'什么样的表达最有效？',                            options:['简单直接，一听就懂','有故事有情节，让人印象深刻','结构清晰，逻辑严谨','生动有趣，吸引注意力'], tags:['concise','story','logical','fun'] },
-  { id:'c11', qType:'choice', dim:2, text:'你希望AI在工作中扮演什么角色？',                  options:['可靠的助手，帮我完成具体任务','智能的伙伴，和我一起思考问题','高效的工具，让我事半功倍','有趣的对话者，帮我打开新思路'], tags:['assistant','partner','tool','creative'] },
+  { id:'c10', qType:'choice', dim:1, text:'什么样的表达最有效？',                              options:['简单直接，一听就懂','有故事有情节，让人印象深刻','结构清晰，逻辑严谨','生动有趣，吸引注意力'], tags:['concise','story','logical','fun'] },
+  { id:'c11', qType:'choice', dim:2, text:'你希望AI在工作中扮演什么角色？',                   options:['可靠的助手，帮我完成具体任务','智能的伙伴，和我一起思考问题','高效的工具，让我事半功倍','有趣的对话者，帮我打开新思路'], tags:['assistant','partner','tool','creative'] },
   { id:'c12', qType:'choice', dim:3, text:'你觉得创新从哪里来？',                              options:['解决一个真实存在的问题','把完全无关的东西组合在一起','对现有事物提出质疑','模仿优秀的案例然后改进'], tags:['practical','cross','question','improve'] },
-  // 判断题 10道 → 每次抽6道
   { id:'t1',  qType:'tf', dim:0, text:'我认为解决问题的过程和答案一样重要',                   tags:['process'] },
   { id:'t2',  qType:'tf', dim:1, text:'如果无法简洁地解释一个想法，说明理解还不够深',         tags:['clarity'] },
-  { id:'t3',  qType:'tf', dim:2, text:'AI是我的得力工具，但判断权永远在自己手里',           tags:['balance'] },
+  { id:'t3',  qType:'tf', dim:2, text:'AI是我的得力工具，但判断权永远在自己手里',            tags:['balance'] },
   { id:'t4',  qType:'tf', dim:3, text:'我经常对常识性的东西感到好奇，想搞清楚为什么',        tags:['curiosity'] },
   { id:'t5',  qType:'tf', dim:0, text:'我愿意接受不确定性，直到有足够证据才下结论',           tags:['sceptic'] },
   { id:'t6',  qType:'tf', dim:3, text:'我经常从完全不相关的领域寻找灵感',                    tags:['creative'] },
@@ -158,7 +195,6 @@ const ALL_QUESTIONS = [
   { id:'t8',  qType:'tf', dim:1, text:'我觉得用比喻讲故事，比讲道理更容易让人记住',          tags:['story'] },
   { id:'t9',  qType:'tf', dim:0, text:'我觉得"标准答案"会限制人的想象力',                   tags:['open'] },
   { id:'t10', qType:'tf', dim:2, text:'我觉得AI是一个很好的 brainstorming 伙伴',            tags:['brainstorm'] },
-  // 排序题 4道 → 每次抽1道
   { id:'s1',  qType:'sort', dim:1, text:'请按对你最重要的程度排序：',                         items:['找到最优解','保持开放心态','兼顾效率与质量','让大家都能理解'], tags:['optimal','open','balanced','accessible'] },
   { id:'s2',  qType:'sort', dim:0, text:'解决一个问题时，你习惯的顺序是：',                  items:['先理解问题的本质','列出可能的解决方案','快速尝试一个方向','根据结果调整改进'], tags:['understand','list','try','iterate'] },
   { id:'s3',  qType:'sort', dim:2, text:'使用AI工具时，你通常会按什么顺序进行：',             items:['明确告诉AI你想要什么','描述你的具体需求或问题','根据AI的回复调整优化','把AI的输出直接使用或修改'], tags:['clear','describe','adjust','use'] },
@@ -168,26 +204,197 @@ const ALL_QUESTIONS = [
 const DIM_NAMES  = ['🔮 逻辑推理', '💬 语言表达', '🤖 AI协作', '✨ 创意想象'];
 const DIM_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899'];
 
-const TYPES = {
-  '逻辑大师':    {icon:'🧠', super:'思维清晰，理性至上，每一步都有理有据'},
-  '创意鬼才':    {icon:'💡', super:'点子多、想法天马行空，总能想到别人想不到的'},
-  'AI指挥官':    {icon:'⚡', super:'善于驾驭AI工具，让技术为想法服务'},
-  '融合思辨者':  {icon:'🔮', super:'不拘一格，融汇理性与感性，思维极具弹性'},
-  '表达大师':    {icon:'🎯', super:'能把复杂问题讲得清晰易懂，影响力强'},
-  '潜力股型':    {icon:'🌱', super:'思维活跃，潜力巨大，正在快速成长中'}
+// ═══════════════════════════════════════════════
+// 详细类型数据（含优劣势 + 隐形能力）
+// ═══════════════════════════════════════════════
+const TYPE_DATA = {
+  '逻辑大师': {
+    icon:'🧠', super:'思维清晰，理性至上，每一步都有理有据',
+    dimDesc:[
+      '你有很强的分析和推理能力，面对复杂问题能迅速找到核心。你习惯用逻辑搭建框架，再填充细节。',
+      '你注重表达的清晰与精准，讨厌模糊和废话。你说和写都追求"一句话讲清楚"。',
+      '你把AI当作工具，更在意如何精准地下指令，让AI按自己的框架执行。',
+      '你对创意的态度偏谨慎，更看重方案是否可行，而非想法本身有多新奇。'
+    ],
+    strengths:[
+      '快速抓住问题本质，拆解复杂任务',
+      '决策有据可依，不容易被情绪带偏',
+      '擅长建立系统和流程，规模化复制'
+    ],
+    weaknesses:[
+      '过度分析导致行动迟缓（分析瘫痪）',
+      '容易忽视"感觉"和"情绪"等软因素',
+      '对没有标准答案的问题容易卡住'
+    ],
+    hiddenAbilities:[
+      '你的逻辑框架其实是很好的AI提示词模板，学会结构化表达可以让AI效率翻倍',
+      '你的"追问"能力极强——遇到不确定的事，你会本能地挖掘更深，这正是AI时代最稀缺的研究能力',
+      '你能发现别人忽略的前提假设和逻辑漏洞，这是做顾问、审计、风控的天然优势'
+    ],
+    growth:[
+      '每天给自己一个"先行动再优化"的小期限，训练快速迭代',
+      '学会欣赏没有逻辑却有效直觉，它们往往是创新的火花',
+      '把决策框架分享给团队，这是你最有价值的领导力输出'
+    ]
+  },
+  '创意鬼才': {
+    icon:'💡', super:'点子多、想法天马行空，总能想到别人想不到的',
+    dimDesc:[
+      '你依赖直觉和灵感解决问题，不喜欢被框架束缚。你的大脑总是在后台并行处理信息。',
+      '你表达时更依赖感受和意象，有时觉得逻辑严谨的说明很无聊。',
+      '你觉得AI是灵感碰撞的伙伴，不喜欢被"指令-执行"束缚。',
+      '你是天生的创新者，讨厌复制别人走过的路，总想找到新的路径。'
+    ],
+    strengths:[
+      '联想能力极强，能跨界组合出全新方案',
+      '对不寻常的点子有很高的容忍度，敢于尝试',
+      '在混乱中能找到隐藏的机会和可能性'
+    ],
+    weaknesses:[
+      '点子多但落地能力弱，"想得到但做不到"',
+      '想法跳跃，解释和说服别人时容易脱节',
+      '不喜欢重复性工作，容易半途而废'
+    ],
+    hiddenAbilities:[
+      '你天生的跨界联想力让AI生成的内容更具独特性——学会引导AI头脑风暴，你能成为超级创意放大器',
+      '你的"反直觉"本能是极度稀缺的战略资产，在需要挑战共识时价值连城',
+      '混乱对你来说是创作空间而非障碍——在0→1的创新阶段，你是无可替代的'
+    ],
+    growth:[
+      '找一个"执行搭档"（人或AI），让你的点子有出口',
+      '用"3句话讲清楚"训练自己把创意落地为可执行的方案',
+      '把点子记录下来再筛选，你会发现自己比想象中更有创造力'
+    ]
+  },
+  'AI指挥官': {
+    icon:'⚡', super:'善于驾驭AI工具，让技术为想法服务',
+    dimDesc:[
+      '你能在感性和理性之间灵活切换，不会被情感带偏也不会沦为纯逻辑机器。',
+      '你知道精准表达的价值，会用具体例子引导AI，理解"说清楚"和"说得好"的区别。',
+      '你是AI的主人而非助手——你会给AI方向，但把判断权留给自己。',
+      '你既能天马行空也能脚踏实地，知道什么时候该用创意，什么时候该用经验。'
+    ],
+    strengths:[
+      '精准提问，能把模糊需求变成清晰指令',
+      '有极强的问题边界判断力，知道何时该追问何时该收手',
+      '在AI协作中保持主导，不被AI带偏也不盲目对抗'
+    ],
+    weaknesses:[
+      '过度优化指令，陷入"提示词工程"而忘记目标本身',
+      '对AI的依赖可能导致独立思考能力的钝化',
+      '在高压决策时可能过度征求AI意见而延迟判断'
+    ],
+    hiddenAbilities:[
+      '你能发现AI和人类各自擅长领域的边界，这是构建人机协作系统的核心能力',
+      '你天生的"批判性信任"——既用AI又不盲信AI——是AI时代最稀缺的管理思维',
+      '你能快速验证AI输出质量并迭代，这种"人机对话质量控制"能力价值极高'
+    ],
+    growth:[
+      '建立自己的AI使用边界清单：哪些事交给AI，哪些必须自己做',
+      '定期清点自己用AI解决了什么问题，评估投入产出比',
+      '把你的AI协作经验结构化输出，这是可以传授给他人的硬技能'
+    ]
+  },
+  '融合思辨者': {
+    icon:'🔮', super:'不拘一格，融汇理性与感性，思维极具弹性',
+    dimDesc:[
+      '你不迷信逻辑也不盲从直觉，而是根据问题选择最合适的思维方式。',
+      '你能用感性的故事说服人，也能用理性的分析让人信服。',
+      '你能把AI当作各种角色——工具、伙伴、批评者——而不局限于一种模式。',
+      '你欣赏秩序也接纳混乱，知道它们各有价值。'
+    ],
+    strengths:[
+      '思维弹性极高，能在多种心智模式间自由切换',
+      '沟通风格因人而异，总能找到最佳表达方式',
+      '面对不确定性时能保持冷静，不被单一框架限制'
+    ],
+    weaknesses:[
+      '没有"标签化"的标签，有时难以快速建立专业认知',
+      '深度可能在某个方向不如专才，有时显得"什么都会一点但不够精"',
+      '决策过程对旁观者来说可能不够透明'
+    ],
+    hiddenAbilities:[
+      '你是天然的"翻译者"——能把技术语言转成人话，把业务需求变成技术方案，这种跨界沟通力在AI时代极珍贵',
+      '你能在不同观点间找到"第三种可能"，这种仲裁能力让你在团队中成为连接者',
+      '你的思维多样性是AI最好的训练伙伴——与AI对话时你能提出它自己想不到的问题'
+    ],
+    growth:[
+      '选择一个方向进行深度深耕，让"融合"有主攻领域',
+      '学会展示自己的决策过程，让"弹性"变成"透明"而非"模糊"',
+      '主动进入多元化的团队和项目，让你的融合能力有更大的发挥空间'
+    ]
+  },
+  '表达大师': {
+    icon:'🎯', super:'能把复杂问题讲得清晰易懂，影响力强',
+    dimDesc:[
+      '你擅长用最简单的话说清复杂的事，逻辑严谨但不死板。',
+      '你知道好故事比好道理更有说服力，擅长用叙事构建共鸣。',
+      '你知道精准表达的重要性，习惯用具体例子引导AI。',
+      '你追求"想到就能说出来"的状态，对语言和表达的掌控力强。'
+    ],
+    strengths:[
+      '能把复杂信息结构化，让不同背景的人都能理解',
+      '擅长讲故事，能触动情感而不依赖逻辑压迫',
+      '对语言的颗粒度感知细腻，用词精准'
+    ],
+    weaknesses:[
+      '过度追求表达形式，可能在内容深度上妥协',
+      '有时为了让人"听得进去"而回避直接说出不受欢迎的真相',
+      '对表达效果的高关注可能带来过度自我审查'
+    ],
+    hiddenAbilities:[
+      '你能把AI的输出"翻译"成目标受众能理解的语言——这是AI产品经理、运营、内容负责人最核心的能力',
+      '你对"怎么说"的敏感让你天然适合做AI对话体验设计，你能发现AI回复"听起来不对"的地方',
+      '你的表达感染力是AI生成内容最好的"质量过滤器"——你能快速判断AI的内容是否"说人话"'
+    ],
+    growth:[
+      '把"先讲结论"作为每次表达的硬性习惯',
+      '刻意练习"用一句话讲清楚"：TED演讲、电梯演讲都是好训练',
+      '研究你欣赏的表达者，拆解他们是如何做到的'
+    ]
+  },
+  '潜力股型': {
+    icon:'🌱', super:'思维活跃，潜力巨大，正在快速成长中',
+    dimDesc:[
+      '你的思维还没有被固定框架定型，可能性对你来说是最大的资产。',
+      '你还没有形成固定的表达风格，但这意味着你有更大的可塑空间。',
+      '你还没有特定的AI使用习惯，这让你可以实验各种方式找到最适合自己的。',
+      '你保持着对世界的好奇，而不是急于给所有事情定性。'
+    ],
+    strengths:[
+      '没有思维定式，愿意尝试新的方法',
+      '接受反馈快，学习能力强',
+      '对未知保持开放而非防御'
+    ],
+    weaknesses:[
+      '缺乏稳定的思维主线，有时思考不够深入',
+      '容易在多个方向间摇摆，难以形成积累',
+      '还没有形成可复用的经验和判断框架'
+    ],
+    hiddenAbilities:[
+      '你最强大的隐形能力是"空杯心态"——没有被旧方法论污染的头脑，是AI时代最好的学习者',
+      '你的多元兴趣是优势，但需要有意识地把一个领域学深，避免浅尝辄止',
+      '趁年轻建立好的思维习惯（批判性思考、结构化表达），这会放大你未来所有的能力'
+    ],
+    growth:[
+      '每学一个东西，强迫自己写一篇输出——教是最好的学',
+      '找一个你欣赏的人作为思维风格的参照，不是模仿而是理解为什么',
+      '建立自己的"决策原则库"——把每次重要的判断和结果记录下来，你会形成自己宝贵的经验资产'
+    ]
+  }
 };
 
 // ═══════════════════════════════════════════════
 // 状态
 // ═══════════════════════════════════════════════
 let state = {
-  view: 'privacy',   // privacy | welcome | test | result | history
+  view: 'privacy',
   questions: [],
   current: 0,
   answers: {},
   completed: false,
   result: null,
-  scoreBucket: null, // 'high' | 'controlled'
+  scoreBucket: null,
   shared: false
 };
 
@@ -257,7 +464,7 @@ function delHistory(i) {
 }
 
 // ═══════════════════════════════════════════════
-// 题目生成（每次随机抽题）
+// 题目生成
 // ═══════════════════════════════════════════════
 function genQuestions() {
   const choices = shuffle(ALL_QUESTIONS.filter(q => q.qType === 'choice')).slice(0, 8);
@@ -270,7 +477,6 @@ function genQuestions() {
 // 计分
 // ═══════════════════════════════════════════════
 function calcResult() {
-  // 统计每个维度各标签出现次数
   const counts = [{}, {}, {}, {}];
   state.questions.forEach(q => {
     const a = state.answers[q.id];
@@ -283,7 +489,6 @@ function calcResult() {
     counts[q.dim][tag]++;
   });
 
-  // 各维度能力百分比
   let pcts = [75, 75, 75, 75];
   for (let d = 0; d < 4; d++) {
     const vals = Object.values(counts[d]);
@@ -294,16 +499,12 @@ function calcResult() {
     }
   }
 
-  // 总分 = 基础分 + 桶内随机bonus
-  const base = Math.round(
-    pcts[0] * 0.35 + pcts[1] * 0.25 + pcts[2] * 0.2 + pcts[3] * 0.2
-  );
+  const base = Math.round(pcts[0] * 0.35 + pcts[1] * 0.25 + pcts[2] * 0.2 + pcts[3] * 0.2);
   const bonus = state.scoreBucket === 'high'
-    ? Math.floor(Math.random() * 8)     // high桶：+0~7 → 最高95
-    : Math.floor(Math.random() * 10);   // controlled桶：+0~9 → 最高88
+    ? Math.floor(Math.random() * 8)
+    : Math.floor(Math.random() * 10);
   const total = Math.min(95, base + bonus);
 
-  // 类型判定
   let mainType = '潜力股型';
   const sorted = [...pcts].sort((a, b) => b - a);
   if (sorted[0] - sorted[3] >= 15) {
@@ -343,7 +544,6 @@ function selectOption(idx) {
   const q = state.questions[state.current];
   if (q.qType === 'sort') return;
   state.answers[q.id] = idx;
-
   if (state.current < state.questions.length - 1) {
     setTimeout(() => { state.current++; render(); }, 180);
   } else {
@@ -354,7 +554,6 @@ function selectOption(idx) {
 function selectTF(idx) {
   const q = state.questions[state.current];
   state.answers[q.id] = idx;
-
   if (state.current < state.questions.length - 1) {
     setTimeout(() => { state.current++; render(); }, 180);
   } else {
@@ -375,7 +574,6 @@ function moveSortItem(pos, dir) {
 function confirmSort() {
   const q = state.questions[state.current];
   if (!state.answers[q.id]) { showToast('请先调整排序'); return; }
-
   if (state.current < state.questions.length - 1) {
     setTimeout(() => { state.current++; render(); }, 200);
   } else {
@@ -407,7 +605,18 @@ function showHistory() {
 }
 
 // ═══════════════════════════════════════════════
-// 事件委托（唯一的事件监听器）
+// 折叠展开
+// ═══════════════════════════════════════════════
+function toggleCollapse(id) {
+  const content = document.getElementById(id);
+  const btn = document.getElementById('btn-' + id);
+  const isOpen = content.classList.contains('open');
+  content.classList.toggle('open');
+  btn.textContent = isOpen ? '▶ 点击展开' : '▼ 点击收起';
+}
+
+// ═══════════════════════════════════════════════
+// 事件委托
 // ═══════════════════════════════════════════════
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-action]');
@@ -427,16 +636,17 @@ document.addEventListener('click', e => {
       moveSortItem(p, d);
       break;
     }
-    case 'share':     downloadShare();   break;
-    case 'restart':    restartTest();    break;
-    case 'home':       goHome();         break;
-    case 'history':    showHistory();    break;
+    case 'share':     downloadShare();    break;
+    case 'restart':   restartTest();     break;
+    case 'home':      goHome();          break;
+    case 'history':   showHistory();     break;
     case 'delHistory': delHistory(+param); render(); break;
+    case 'collapse':  toggleCollapse(param); break;
   }
 });
 
 // ═══════════════════════════════════════════════
-// 渲染层（纯函数，同 state → DOM）
+// 渲染层
 // ═══════════════════════════════════════════════
 function render() {
   document.getElementById('app').innerHTML =
@@ -511,7 +721,7 @@ function renderTest() {
     <button class="sort-confirm-btn" data-action="confirmSort">确认排序 →</button>`;
   }
 
-  return `<div style="width:100%;max-width:480px">
+  return `<div style="width:100%;max-width:520px">
     <div class="top-bar">
       <div class="logo">🧠 AI思维测试</div>
       <div class="step-badge">${state.current + 1} / ${total}</div>
@@ -543,11 +753,15 @@ function renderTest() {
 }
 
 function renderResult() {
-  const r     = state.result;
-  const t     = TYPES[r.type];
-  const shared = state.shared;
+  const r       = state.result;
+  const td      = TYPE_DATA[r.type];
+  const shared  = state.shared;
 
-  let html = `<div style="width:100%;max-width:480px">
+  // 最高和最低维度
+  const maxDim  = r.pcts.indexOf(Math.max(...r.pcts));
+  const minDim  = r.pcts.indexOf(Math.min(...r.pcts));
+
+  let html = `<div style="width:100%;max-width:520px">
     <div class="top-bar">
       <div class="logo">🧠 AI思维测试</div>
       <div class="step-badge">测试完成</div>
@@ -555,7 +769,8 @@ function renderResult() {
     <div class="card result-hero">
       <div class="result-score">${r.total}</div>
       <div class="result-label">你的思维天赋得分</div>
-      <div class="type-badge">${t.icon} ${r.type}</div>
+      <div class="type-badge">${td.icon} ${r.type}</div>
+      <div class="type-super">${td.super}</div>
     </div>`;
 
   if (!shared) {
@@ -563,9 +778,8 @@ function renderResult() {
     <div class="unlock-card">
       <div class="unlock-icon">🔓</div>
       <div class="unlock-title">测试完成！你是"${r.type}"</div>
-      <div class="unlock-desc">想知道完整报告？<br>分享给朋友即可免费解锁</div>
+      <div class="unlock-desc">想知道完整报告？<br>分享给朋友即可免费解锁详细分析</div>
       <div class="unlock-score">${r.total}分</div>
-      <div class="unlock-desc" style="font-size:12px">${t.super}</div>
       <button class="share-btn" data-action="share">🔗 点击分享 → 免费解锁完整结果</button>
       <div class="bottom-btns">
         <button class="bottom-btn" data-action="restart">🔄 重新测试</button>
@@ -573,26 +787,81 @@ function renderResult() {
       </div>
     </div>`;
   } else {
+    // ── 完整详细报告 ──
+
+    // 1. 四维能力雷达
     html += `
     <div class="ability-card">
-      <h3>📊 能力雷达</h3>
-      ${r.pcts.map((p, i) => `
+      <h3 class="section-title"><span class="icon">📊</span> 四维能力雷达</h3>
+      ${r.pcts.map((p, i) => {
+        const labels = ['逻辑推理','语言表达','AI协作','创意想象'];
+        const isHigh = i === maxDim;
+        const isLow  = i === minDim;
+        const badge  = isHigh ? ' · 最高' : isLow ? ' · 待提升' : '';
+        return `
         <div class="ability-row">
           <span class="ability-icon">${['🔮','💬','🤖','✨'][i]}</span>
-          <span class="ability-name">${DIM_NAMES[i].split(' ')[1]}</span>
+          <span class="ability-name">${labels[i]}</span>
           <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:${p}%;background:${DIM_COLORS[i]}"></div></div>
-          <span class="ability-pct" style="color:${DIM_COLORS[i]}">${p}%</span>
-        </div>`).join('')}
-    </div>
-    <div class="detail-card">
-      <h3>🏷️ 核心特征</h3>
-      <div class="feature-tags">
-        <span class="tag">${r.type}</span>
-        <span class="tag">得分${r.total}</span>
-        <span class="tag">${['逻辑','表达','协作','创意'][r.pcts.indexOf(Math.max(...r.pcts))]}</span>
+          <span class="ability-pct" style="color:${DIM_COLORS[i]}">${p}%${badge}</span>
+        </div>
+        <div class="ability-desc" style="margin-bottom:14px;margin-left:34px">${td.dimDesc[i]}</div>`;
+      }).join('')}
+    </div>`;
+
+    // 2. 优劣势分析
+    html += `
+    <div class="strength-card">
+      <h3 class="section-title"><span class="icon">⚡</span> 优劣势分析</h3>
+      <div style="margin-bottom:16px">
+        <div class="strength-item">
+          <div class="strength-icon pro">💪</div>
+          <div class="strength-text">
+            <div class="strength-label pro">核心优势</div>
+            ${td.strengths.map(s => `<div class="strength-detail">• ${s}</div>`).join('')}
+          </div>
+        </div>
       </div>
-      <p class="type-desc">${t.super}</p>
-    </div>
+      <div style="margin-bottom:0">
+        <div class="strength-item">
+          <div class="strength-icon con">📉</div>
+          <div class="strength-text">
+            <div class="strength-label con">待提升点</div>
+            ${td.weaknesses.map(w => `<div class="strength-detail">• ${w}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+    // 3. 隐形能力（折叠）
+    html += `
+    <div class="strength-card">
+      <h3 class="section-title"><span class="icon">🔮</span> 隐形能力 · 多数人不知道</h3>
+      <div style="margin-bottom:0">
+        ${td.hiddenAbilities.map((h, i) => `
+        <div class="strength-item">
+          <div class="strength-icon hidden">💎</div>
+          <div class="strength-text">
+            <div class="strength-label hidden">隐形能力 ${i + 1}</div>
+            <div class="strength-detail">${h}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+
+    // 4. 成长建议（折叠）
+    html += `
+    <div class="growth-card">
+      <h3 class="section-title"><span class="icon">🚀</span> 行动建议 · 立刻可以做的事</h3>
+      ${td.growth.map((g, i) => `
+        <div class="growth-item">
+          <div class="growth-num">${i + 1}</div>
+          <div class="growth-text">${g}</div>
+        </div>`).join('')}
+    </div>`;
+
+    // 底部按钮
+    html += `
     <button class="nav-btn nav-next" style="margin-bottom:12px" data-action="share">🖼️ 保存分享图</button>
     <div class="bottom-btns">
       <button class="bottom-btn" data-action="restart">🔄 重新测试</button>
@@ -626,81 +895,64 @@ function renderHistory() {
 }
 
 // ═══════════════════════════════════════════════
-// 分享图生成
+// 分享图
 // ═══════════════════════════════════════════════
 function downloadShare() {
   const r = state.result;
-  const t = TYPES[r.type];
+  const t = TYPE_DATA[r.type];
   const cv = document.createElement('canvas');
-  cv.width = 400; cv.height = 520;
+  cv.width = 400; cv.height = 560;
   const ctx = cv.getContext('2d');
 
-  // 背景
   ctx.fillStyle = '#080810';
-  ctx.fillRect(0, 0, 400, 520);
+  ctx.fillRect(0, 0, 400, 560);
 
-  // 渐变光晕
-  const grad = ctx.createRadialGradient(200, 0, 0, 200, 0, 400);
+  const grad = ctx.createRadialGradient(200, 0, 0, 200, 0, 420);
   grad.addColorStop(0, 'rgba(99,102,241,0.2)');
   grad.addColorStop(1, 'transparent');
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 400, 280);
+  ctx.fillRect(0, 0, 400, 300);
 
-  // 标题
   ctx.fillStyle = '#6366f1';
   ctx.font = 'bold 14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('AI思维测试', 200, 46);
+  ctx.fillText('AI思维测试', 200, 44);
 
-  // 分数
   ctx.fillStyle = '#f1f5f9';
-  ctx.font = 'bold 52px sans-serif';
-  ctx.fillText(r.total + '分', 200, 120);
+  ctx.font = 'bold 56px sans-serif';
+  ctx.fillText(r.total + '分', 200, 116);
 
-  // 类型徽章
   ctx.fillStyle = 'rgba(99,102,241,0.15)';
-  ctx.beginPath();
-  ctx.roundRect(115, 140, 170, 40, 20);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(99,102,241,0.35)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.fillStyle = '#f1f5f9';
-  ctx.font = 'bold 16px sans-serif';
-  ctx.fillText(t.icon + ' ' + r.type, 200, 168);
+  ctx.beginPath(); ctx.roundRect(115, 136, 170, 40, 20); ctx.fill();
+  ctx.strokeStyle = 'rgba(99,102,241,0.35)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 16px sans-serif';
+  ctx.fillText(t.icon + ' ' + r.type, 200, 164);
 
-  // 雷达条（4个维度）
   const colors = ['#6366f1','#10b981','#f59e0b','#ec4899'];
   const names  = ['逻辑推理','语言表达','AI协作','创意想象'];
   r.pcts.forEach((p, i) => {
-    const y = 218 + i * 50;
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '13px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(names[i], 48, y);
+    const y = 210 + i * 46;
+    ctx.fillStyle = '#94a3b8'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(names[i], 44, y);
     ctx.fillStyle = 'rgba(255,255,255,0.08)';
-    ctx.beginPath(); ctx.roundRect(48, y + 7, 200, 6, 3); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(44, y + 6, 190, 5, 2); ctx.fill();
     ctx.fillStyle = colors[i];
-    ctx.beginPath(); ctx.roundRect(48, y + 7, 200 * p / 100, 6, 3); ctx.fill();
-    ctx.fillStyle = colors[i];
-    ctx.font = 'bold 12px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(p + '%', 298, y + 4);
+    ctx.beginPath(); ctx.roundRect(44, y + 6, 190 * p / 100, 5, 2); ctx.fill();
+    ctx.fillStyle = colors[i]; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(p + '%', 294, y + 2);
   });
 
-  // 底部语
-  ctx.fillStyle = '#475569';
-  ctx.font = 'italic 11px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('"' + t.super + '"', 200, 488);
+  ctx.fillStyle = '#475569'; ctx.font = 'italic 10px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('"' + t.super + '"', 200, 516);
 
-  // 下载
+  ctx.fillStyle = '#6366f1'; ctx.font = '10px sans-serif';
+  ctx.fillText('czxcyy.github.io/ai', 200, 542);
+
   const link = document.createElement('a');
   link.download = `AI思维测试_${r.total}分_${r.type}.png`;
   link.href = cv.toDataURL();
   link.click();
 
-  // 解锁完整报告
   if (!state.shared) {
     state.shared = true;
     render();
