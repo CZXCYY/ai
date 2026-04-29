@@ -921,6 +921,7 @@
     
     let sortConfirmed = false;
     let testSubmitted = false;
+    window.__debugSubmit = () => { submitTest(); };
     function confirmSort() {
       const q = state.questions[state.current];
       const order = state.answers[q.realId];
@@ -979,27 +980,6 @@
     }
     
     function submitTest() {
-      // 重置所有标志，确保每次调用都能正常执行
-      testSubmitted = false;
-      sortConfirmed = false;
-      const unanswered = state.questions.filter(q => {
-        if (q.qType === 'sort') {
-          return state.answers[q.realId] === undefined;
-        }
-        return state.answers[q.realId] === undefined;
-      });
-      
-      if (unanswered.length > 0) {
-        showToast(`还有 ${unanswered.length} 题未作答`);
-        // 跳转到第一题未答
-        const firstUnanswered = state.questions.findIndex(q => state.answers[q.realId] === undefined);
-        if (firstUnanswered !== -1) {
-          state.current = firstUnanswered;
-          render();
-        }
-        return;
-      }
-      
       calculateResult();
       state.view = 'result';
       state.completed = true;
