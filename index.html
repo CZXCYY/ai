@@ -741,6 +741,7 @@
     }
     
     function startTest() {
+      testSubmitted = false; // 强制重置，防止跨会话残留
       // 隐藏隐私弹窗，开始测试
       document.getElementById('privacyModal').classList.add('hidden');
       state.questions = generateQuestions();
@@ -1277,7 +1278,6 @@
       saveState();
       render();
     }
-    
     function goHome() {
       state.view = 'welcome';
       saveState();
